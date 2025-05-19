@@ -2,21 +2,23 @@
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <title>Mnémosyne interactif</title>
+    <title>Mnémosyne – Focus images</title>
     <style>
       html,
       body {
         margin: 0;
         height: 100%;
-        background: black;
         overflow: hidden;
+        background: black;
       }
 
       body.with-gif {
         background: black
-          url("https://i.pinimg.com/originals/95/ce/f5/95cef5d43b1e1628bc649d3d86032220.gif")
-          no-repeat center center;
-        background-size: contain;
+            url("https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExNmFkZms1aWRyZWlxZzEzMW9keGJ3cmE0ZTY1dG14YWJ6Y3J6NzlxZiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o7bubkR8SgWlMZewg/giphy.gif")
+            no-repeat center center,
+          url("https://www.transparenttextures.com/patterns/asfalt-dark.png")
+            repeat;
+        background-size: contain, auto;
       }
 
       .container {
@@ -30,15 +32,38 @@
         position: absolute;
         top: 50%;
         left: 50%;
-        width: 60px;
-        height: 60px;
-        background: red;
+        width: 80px;
+        height: 80px;
+        background: red
+          url("https://www.transparenttextures.com/patterns/az-subtle.png");
+
         clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
         transform: translate(-50%, -50%);
         z-index: 10;
         cursor: pointer;
         box-shadow: 0 0 12px rgba(255, 0, 0, 0.6);
-        animation: pulseHex 2.2s ease-in-out infinite;
+        animation: pulseHex 2.2s ease-in-out infinite,
+          spinHex 3s linear infinite;
+      }
+
+      @keyframes spinHex {
+        from {
+          transform: translate(-50%, -50%) rotate(0deg);
+        }
+        to {
+          transform: translate(-50%, -50%) rotate(360deg);
+        }
+      }
+      @keyframes rotate3D {
+        0% {
+          transform: translate(-50%, -50%) rotateX(0deg) rotateY(0deg);
+        }
+        50% {
+          transform: translate(-50%, -50%) rotateX(15deg) rotateY(15deg);
+        }
+        100% {
+          transform: translate(-50%, -50%) rotateX(0deg) rotateY(0deg);
+        }
       }
 
       @keyframes pulseHex {
@@ -50,50 +75,6 @@
         50% {
           transform: translate(-50%, -50%) scale(1.07);
           box-shadow: 0 0 22px rgba(255, 0, 0, 0.8);
-        }
-      }
-
-      @keyframes pulse {
-        0%,
-        100% {
-          transform: translate(-50%, -50%) scale(1);
-          box-shadow: 0 0 20px rgba(255, 0, 0, 0.6),
-            0 0 40px rgba(255, 0, 0, 0.3);
-        }
-        50% {
-          transform: translate(-50%, -50%) scale(1.1);
-          box-shadow: 0 0 35px rgba(255, 0, 0, 0.9),
-            0 0 60px rgba(255, 0, 0, 0.6);
-        }
-      }
-
-      @keyframes spin {
-        from {
-          transform: translate(-50%, -50%) rotate(0deg);
-        }
-        to {
-          transform: translate(-50%, -50%) rotate(360deg);
-        }
-      }
-
-      @keyframes pulse {
-        0%,
-        100% {
-          transform: translate(-50%, -50%) scale(1);
-          box-shadow: 0 0 10px rgba(255, 0, 0, 0.6);
-        }
-        50% {
-          transform: translate(-50%, -50%) scale(1.1);
-          box-shadow: 0 0 20px rgba(255, 0, 0, 0.9);
-        }
-      }
-
-      @keyframes spin {
-        from {
-          transform: translate(-50%, -50%) rotate(0deg);
-        }
-        to {
-          transform: translate(-50%, -50%) rotate(360deg);
         }
       }
 
@@ -117,10 +98,11 @@
         position: absolute;
         width: 200px;
         opacity: 0.6;
-        transition: opacity 1s ease;
+        transition: opacity 0.6s ease, transform 0.4s ease, left 0.4s ease,
+          top 0.4s ease, width 0.4s ease;
         animation: float 6s ease-in-out infinite alternate;
         z-index: 4;
-        pointer-events: none;
+        pointer-events: auto;
       }
 
       @keyframes float {
@@ -144,6 +126,26 @@
         z-index: 20;
         animation: pulseWhite 2s infinite ease-in-out;
       }
+      .focus-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 15;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.4s ease;
+      }
+      .focus-overlay.visible {
+        opacity: 1;
+      }
+      .floating-image.blurred {
+        filter: blur(2px);
+        opacity: 0.3;
+        transition: filter 0.4s ease, opacity 0.4s ease;
+      }
 
       @keyframes pulseWhite {
         0%,
@@ -164,19 +166,15 @@
   </head>
   <body class="with-gif">
     <div class="container">
-      <!-- Bouton rouge central -->
       <div class="center-button" id="startBtn"></div>
-
-      <!-- Image centrale -->
       <div class="image-reveal" id="imageReveal">
         <img
           src="https://www.moma.org/s/ge/collection_images/resized/459/w500h420/CRI_176459.jpg"
           alt="Mnémosyne - Warburg"
         />
       </div>
-
-      <!-- Bouton reset -->
       <div class="reset-button" onclick="location.reload()"></div>
+      <div class="focus-overlay" id="focusOverlay"></div>
     </div>
 
     <script>
@@ -198,9 +196,11 @@
         "https://fydn.imgix.net/m/x1000/135152dc-73a2-422a-a37a-6ed3e3af25ed.jpg?q=75&auto=format,compress&w=980&dpr=1",
       ];
 
+      const placedPositions = [];
       let currentImageIndex = 0;
 
       document.getElementById("startBtn").addEventListener("click", () => {
+        document.getElementById("clickSound").play();
         document.getElementById("startBtn").classList.add("hide");
         document.body.classList.remove("with-gif");
         document.getElementById("imageReveal").style.display = "block";
@@ -214,6 +214,14 @@
         newImg.src = imageList[currentImageIndex];
         newImg.className = "floating-image";
 
+        const scale = 0.9 + Math.random() * 0.3;
+        const opacity = 0.4 + Math.random() * 0.5;
+        const duration = 4 + Math.random() * 6;
+
+        newImg.style.opacity = opacity;
+        newImg.style.transform = `scale(${scale})`;
+        newImg.style.animationDuration = `${duration}s`;
+
         const centerX = container.offsetWidth / 2;
         const centerY = container.offsetHeight / 2;
 
@@ -221,30 +229,40 @@
         let placed = false;
 
         while (!placed && attempts < 100) {
-          const angle = (currentImageIndex * 137.5 + attempts * 15) % 360;
-          const radius = 200 + currentImageIndex * 35 + Math.random() * 50;
+          const angle = (currentImageIndex * 137.5 + attempts * 5) % 360;
+          const radius = 200 + currentImageIndex * 35 + Math.random() * 30;
 
           const rad = angle * (Math.PI / 180);
-          const randOffsetX = (Math.random() - 0.5) * 40;
-          const randOffsetY = (Math.random() - 0.5) * 40;
+          const offsetX = (Math.random() - 0.5) * 40;
+          const offsetY = (Math.random() - 0.5) * 40;
 
-          const posX = centerX + radius * Math.cos(rad) + randOffsetX - 100;
-          const posY = centerY + radius * Math.sin(rad) + randOffsetY - 100;
+          const posX = centerX + radius * Math.cos(rad) + offsetX - 100;
+          const posY = centerY + radius * Math.sin(rad) + offsetY - 100;
 
-          const dx = posX + 100 - centerX;
-          const dy = posY + 100 - centerY;
-          const dist = Math.sqrt(dx * dx + dy * dy);
+          const finalX = Math.max(
+            0,
+            Math.min(posX, container.offsetWidth - 200)
+          );
+          const finalY = Math.max(
+            0,
+            Math.min(posY, container.offsetHeight - 200)
+          );
 
-          if (dist > 250) {
-            // évite zone centrale
-            newImg.style.left = `${Math.max(
-              0,
-              Math.min(posX, container.offsetWidth - 200)
-            )}px`;
-            newImg.style.top = `${Math.max(
-              0,
-              Math.min(posY, container.offsetHeight - 200)
-            )}px`;
+          const tooClose = placedPositions.some((pos) => {
+            const dx = finalX - pos.x;
+            const dy = finalY - pos.y;
+            return Math.sqrt(dx * dx + dy * dy) < 160;
+          });
+
+          const distCenter = Math.sqrt(
+            Math.pow(finalX + 100 - centerX, 2) +
+              Math.pow(finalY + 100 - centerY, 2)
+          );
+
+          if (!tooClose && distCenter > 250) {
+            newImg.style.left = `${finalX}px`;
+            newImg.style.top = `${finalY}px`;
+            placedPositions.push({ x: finalX, y: finalY });
             placed = true;
           }
 
@@ -253,7 +271,56 @@
 
         container.appendChild(newImg);
         currentImageIndex++;
+
+        newImg.dataset.originalLeft = newImg.style.left;
+        newImg.dataset.originalTop = newImg.style.top;
+        newImg.dataset.focused = "false";
+
+        function restoreImage(img) {
+          img.style.left = img.dataset.originalLeft;
+          img.style.top = img.dataset.originalTop;
+          img.style.width = "200px";
+          img.style.transform = "";
+          img.style.zIndex = "4";
+          img.dataset.focused = "false";
+
+          // 🔴 Masquer le fond sombre
+          document.getElementById("focusOverlay").classList.remove("visible");
+
+          // 🔵 Supprimer le flou des autres images
+          document.querySelectorAll(".floating-image").forEach((el) => {
+            el.classList.remove("blurred");
+          });
+        }
+
+        newImg.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const img = e.currentTarget;
+          const isFocused = img.dataset.focused === "true";
+
+          if (!isFocused) {
+            const centerX = container.offsetWidth / 2 - 250;
+            const centerY = container.offsetHeight / 2 - 210;
+            document.getElementById("focusOverlay").classList.add("visible");
+
+            // Flouter les autres images
+            document.querySelectorAll(".floating-image").forEach((el) => {
+              if (el !== img) el.classList.add("blurred");
+            });
+
+            img.style.left = `${centerX}px`;
+            img.style.top = `${centerY}px`;
+            img.style.width = "500px";
+            img.style.transform = "scale(1)";
+            img.style.zIndex = "20";
+            img.dataset.focused = "true";
+          } else {
+            restoreImage(img);
+            document.getElementById("focusOverlay").classList.remove("visible");
+          }
+        });
       });
     </script>
+    <audio id="clickSound" src="clic.mp3" preload="auto"></audio>
   </body>
 </html>
