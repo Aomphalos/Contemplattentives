@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Mnémosyne interactif</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        background: black;
+        overflow: hidden;
+      }
+
+      body.with-gif {
+        background: black
+          url("https://i.pinimg.com/originals/8c/25/99/8c259906854fb117176fa7fae6b2b70b.gif")
+          no-repeat center center;
+        background-size: contain;
+      }
+
+      .letter-rain {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        overflow: hidden;
+        z-index: 0;
+      }
+
+      .letter-rain span {
+        position: absolute;
+        top: -10%;
+        color: white;
+        font-size: 24px;
+        opacity: 0.25;
+        animation: fall linear infinite;
+        font-family: monospace;
+      }
+
+      @keyframes fall {
+        0% {
+          transform: translateY(-10vh);
+          opacity: 0.25;
+        }
+        100% {
+          transform: translateY(110vh);
+          opacity: 0;
+        }
+      }
+
+      .container {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        z-index: 1;
+      }
+
+      .center-button {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 60px;
+        height: 60px;
+        background: red;
+        clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
+        transform: translate(-50%, -50%);
+        z-index: 10;
+        cursor: pointer;
+        box-shadow: 0 0 10px rgba(255, 0, 0, 0.6);
+        animation: pulse 1.5s infinite ease-in-out, spin 10s linear infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: translate(-50%, -50%) scale(1);
+          box-shadow: 0 0 10px rgba(255, 0, 0, 0.6);
+        }
+        50% {
+          transform: translate(-50%, -50%) scale(1.1);
+          box-shadow: 0 0 20px rgba(255, 0, 0, 0.9);
+        }
+      }
+
+      @keyframes spin {
+        from {
+          transform: translate(-50%, -50%) rotate(0deg);
+        }
+        to {
+          transform: translate(-50%, -50%) rotate(360deg);
+        }
+      }
+
+      .image-reveal {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 5;
+        display: none;
+        cursor: pointer;
+      }
+
+      .image-reveal img {
+        max-width: 500px;
+        max-height: 420px;
+        display: block;
+      }
+
+      .floating-image {
+        position: absolute;
+        width: 200px;
+        opacity: 0.6;
+        transition: opacity 1s ease;
+        animation: float 6s ease-in-out infinite alternate;
+        z-index: 4;
+        pointer-events: none;
+      }
+
+      @keyframes float {
+        0% {
+          transform: translateY(0px);
+        }
+        100% {
+          transform: translateY(10px);
+        }
+      }
+
+      .reset-button {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 30px;
+        height: 30px;
+        background: white;
+        clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
+        cursor: pointer;
+        z-index: 20;
+        animation: pulseWhite 2s infinite ease-in-out;
+      }
+
+      @keyframes pulseWhite {
+        0%,
+        100% {
+          transform: scale(1);
+          opacity: 0.7;
+        }
+        50% {
+          transform: scale(1.1);
+          opacity: 1;
+        }
+      }
+
+      .hide {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body class="with-gif">
+    <!-- Pluie de lettres -->
+    <div class="letter-rain" id="rain"></div>
+
+    <div class="container">
+      <!-- Bouton rouge central -->
+      <div class="center-button" id="startBtn"></div>
+
+      <!-- Image centrale -->
+      <div class="image-reveal" id="imageReveal">
+        <img
+          src="https://www.moma.org/s/ge/collection_images/resized/459/w500h420/CRI_176459.jpg"
+          alt="Mnémosyne - Warburg"
+        />
+      </div>
+
+      <!-- Bouton reset -->
+      <div class="reset-button" onclick="location.reload()"></div>
+    </div>
+
+    <script>
+      // Pluie de lettres
+      const symbols = "ᛉ Ω ξ ש ね Ϟ Ж Ⲙ ༀ Ꙭ δ Ϫ ψ ʘ ∴ ҂ ჻ ∇ Ʌ ⊗".split(" ");
+      const rain = document.getElementById("rain");
+
+      for (let i = 0; i < 100; i++) {
+        const span = document.createElement("span");
+        span.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+        span.style.left = `${Math.random() * 100}%`;
+        span.style.animationDuration = `${6 + Math.random() * 8}s`;
+        span.style.fontSize = `${12 + Math.random() * 24}px`;
+        rain.appendChild(span);
+      }
+
+      const imageList = [
+        "https://acces.ens-lyon.fr/acces/thematiques/limites/ecoles/parcours/chartreuse/img/profil_5.jpg",
+        "https://acces.ens-lyon.fr/acces/thematiques/limites/ecoles/parcours/chartreuse/img/figures_coupe_copie.jpg",
+        "https://infoterre.brgm.fr/sites/default/files/upload/a_cgeo050_0749_1_jpg_0.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Artemistempleplan.jpg/960px-Artemistempleplan.jpg",
+        "https://www.meisterdrucke.fr/kunstwerke/1260px/Unknown_Artist_-_Cross_section_of_the_earth_crust_allowing_Athanasius_Kircher_to_demonstrate_the_-_%28MeisterDrucke-949340%29.jpg",
+        "https://i.la-croix.com/836x/smart/croire/2015/11/27/1700874510/LAnnonciation-Fra-Angelico-Musee-Prado-Madrid_0.jpg",
+        "https://www.hqe.guidenr.fr/images/couches-thermiques-atmosphere.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/6/62/Bilma-Saline-85.jpg",
+        "https://pouvoirsafrique.com/pouvoirsafrique/uploads/images/2025/01/08/12169.png",
+        "https://polinacouture.com/wp-content/uploads/2022/04/intro-art-aborigene.jpg",
+        "https://images.squarespace-cdn.com/content/v1/577b0a48e4fcb599ceaf2072/1570968992861-QO3JECLJZ0B519EX61VK/Armando+Veve+encore+plus+petit.jpg?format=2500w",
+        "https://culturellementvotre.fr/wp-content/uploads/2020/10/palais-mental-1-810x552.jpg",
+        "https://revue-acropolis.com/wp-content/uploads/sites/20/2023/08/321.Memoire-Renaissance.theatre_de_memoire_Giulio_Camillo_Delminio-780x470.jpg",
+        "https://d-fiction.fr/wp-content/uploads/2021/12/Boutonnet-Mof-Image2.jpg",
+        "https://fydn.imgix.net/m/x1000/135152dc-73a2-422a-a37a-6ed3e3af25ed.jpg?q=75&auto=format,compress&w=980&dpr=1",
+      ];
+
+      let currentImageIndex = 0;
+
+      document.getElementById("startBtn").addEventListener("click", () => {
+        document.getElementById("startBtn").classList.add("hide");
+        document.body.classList.remove("with-gif");
+        document.getElementById("imageReveal").style.display = "block";
+      });
+
+      document.getElementById("imageReveal").addEventListener("click", () => {
+        if (currentImageIndex >= imageList.length) return;
+
+        const container = document.querySelector(".container");
+        const newImg = document.createElement("img");
+        newImg.src = imageList[currentImageIndex];
+        newImg.className = "floating-image";
+
+        const maxW = container.offsetWidth - 220;
+        const maxH = container.offsetHeight - 220;
+        let attempts = 0,
+          ok = false;
+        while (!ok && attempts < 50) {
+          const randX = Math.random() * maxW;
+          const randY = Math.random() * maxH;
+          const dx = randX + 100 - container.offsetWidth / 2;
+          const dy = randY + 100 - container.offsetHeight / 2;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist > 300) {
+            newImg.style.left = randX + "px";
+            newImg.style.top = randY + "px";
+            ok = true;
+          }
+          attempts++;
+        }
+
+        if (ok) container.appendChild(newImg);
+        currentImageIndex++;
+      });
+    </script>
+  </body>
+</html>
