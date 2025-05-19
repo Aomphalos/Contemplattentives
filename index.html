@@ -14,7 +14,7 @@
 
       body.with-gif {
         background: black
-          url("https://i.pinimg.com/originals/8c/25/99/8c259906854fb117176fa7fae6b2b70b.gif")
+          url("https://i.pinimg.com/originals/95/ce/f5/95cef5d43b1e1628bc649d3d86032220.gif")
           no-repeat center center;
         background-size: contain;
       }
@@ -69,8 +69,43 @@
         transform: translate(-50%, -50%);
         z-index: 10;
         cursor: pointer;
-        box-shadow: 0 0 10px rgba(255, 0, 0, 0.6);
-        animation: pulse 1.5s infinite ease-in-out, spin 10s linear infinite;
+        box-shadow: 0 0 12px rgba(255, 0, 0, 0.6);
+        animation: pulseHex 2.2s ease-in-out infinite;
+      }
+
+      @keyframes pulseHex {
+        0%,
+        100% {
+          transform: translate(-50%, -50%) scale(1);
+          box-shadow: 0 0 12px rgba(255, 0, 0, 0.5);
+        }
+        50% {
+          transform: translate(-50%, -50%) scale(1.07);
+          box-shadow: 0 0 22px rgba(255, 0, 0, 0.8);
+        }
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: translate(-50%, -50%) scale(1);
+          box-shadow: 0 0 20px rgba(255, 0, 0, 0.6),
+            0 0 40px rgba(255, 0, 0, 0.3);
+        }
+        50% {
+          transform: translate(-50%, -50%) scale(1.1);
+          box-shadow: 0 0 35px rgba(255, 0, 0, 0.9),
+            0 0 60px rgba(255, 0, 0, 0.6);
+        }
+      }
+
+      @keyframes spin {
+        from {
+          transform: translate(-50%, -50%) rotate(0deg);
+        }
+        to {
+          transform: translate(-50%, -50%) rotate(360deg);
+        }
       }
 
       @keyframes pulse {
@@ -227,25 +262,44 @@
         newImg.src = imageList[currentImageIndex];
         newImg.className = "floating-image";
 
-        const maxW = container.offsetWidth - 220;
-        const maxH = container.offsetHeight - 220;
-        let attempts = 0,
-          ok = false;
-        while (!ok && attempts < 50) {
-          const randX = Math.random() * maxW;
-          const randY = Math.random() * maxH;
-          const dx = randX + 100 - container.offsetWidth / 2;
-          const dy = randY + 100 - container.offsetHeight / 2;
+        const centerX = container.offsetWidth / 2;
+        const centerY = container.offsetHeight / 2;
+
+        let attempts = 0;
+        let placed = false;
+
+        while (!placed && attempts < 100) {
+          const angle = (currentImageIndex * 137.5 + attempts * 15) % 360;
+          const radius = 200 + currentImageIndex * 35 + Math.random() * 50;
+
+          const rad = angle * (Math.PI / 180);
+          const randOffsetX = (Math.random() - 0.5) * 40;
+          const randOffsetY = (Math.random() - 0.5) * 40;
+
+          const posX = centerX + radius * Math.cos(rad) + randOffsetX - 100;
+          const posY = centerY + radius * Math.sin(rad) + randOffsetY - 100;
+
+          const dx = posX + 100 - centerX;
+          const dy = posY + 100 - centerY;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist > 300) {
-            newImg.style.left = randX + "px";
-            newImg.style.top = randY + "px";
-            ok = true;
+
+          if (dist > 250) {
+            // évite zone centrale
+            newImg.style.left = `${Math.max(
+              0,
+              Math.min(posX, container.offsetWidth - 200)
+            )}px`;
+            newImg.style.top = `${Math.max(
+              0,
+              Math.min(posY, container.offsetHeight - 200)
+            )}px`;
+            placed = true;
           }
+
           attempts++;
         }
 
-        if (ok) container.appendChild(newImg);
+        container.appendChild(newImg);
         currentImageIndex++;
       });
     </script>
