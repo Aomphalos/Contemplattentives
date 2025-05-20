@@ -2,257 +2,139 @@
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <title>Mnémosyne – Focus images</title>
+    <title>Mnémosyne – Site interactif complet</title>
     <style>
-                                                            .oculus-container {
-                                                              width: 300px;
-                                                              height: 300px;
-                                                              border-radius: 50%;
-                                                              overflow: hidden;
-                                                              cursor: pointer;
-                                                              position: absolute;
-                                                              top: 50%;
-                                                              left: 50%;
-                                                              transform: translate(-50%, -150%);
-                                                              z-index: 10;
-                                                              box-shadow: 0 0 30px rgba(255, 255, 255, 0.15);
-                                                            }
-                                                            .light-shadow {
-                                            position: absolute;
-                                            top: 60%;
-                                            left: 50%;
-                                            width: 400px;
-                                            height: 300px;
-                                            transform: translateX(-50%);
-                                            background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.05) 0%, transparent 80%);
-                                            filter: blur(80px);
-                                            opacity: 0.8;
-                                            animation: shadowPulse 8s ease-in-out infinite;
-                                            pointer-events: none;
-                                            z-index: 2;
-                                          }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        background: black;
+        overflow-x: hidden;
+        overflow-y: auto;
+      }
 
-                                          @keyframes shadowPulse {
-                                      0%, 100% { opacity: 0.8; filter: blur(60px); }
-                                      50% { opacity: 1; filter: blur(100px); }
-                                    }
-
-
-                                                            .oculus-container img {
-                                                              width: 100%;
-                                                              height: 100%;
-                                                              object-fit: cover;
-                                                              display: block;
-                                                              <div class="oculus-background" id="oculusBackground"></div>
-                                                      }
-
-                                                            html,
-                                                            body {
-              margin: 0;
-              padding: 0;
-              height: auto;
-              min-height: 100vh;
-              background: black;
-              overflow-x: hidden;
-              overflow-y: auto;
-            }
-                                                            body.with-gif {
-                                                              background: black
-                                                                  url("https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExNmFkZms1aWRyZWlxZzEzMW9keGJ3cmE0ZTY1dG14YWJ6Y3J6NzlxZiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o7bubkR8SgWlMZewg/giphy.gif")
-                                                                  no-repeat center center,
-                                                                url("https://www.transparenttextures.com/patterns/asfalt-dark.png")
-                                                                  repeat;
-                                                              background-size: contain, auto;
-                                                            }
-
-                                                            .container {
+      .container {
         position: relative;
         width: 100%;
-        min-height: 150vh; /* espace vertical plus généreux */
-        padding-bottom: 200px;
+        min-height: 300vh;
+        padding-bottom: 300px;
       }
-                                                            .center-button {
-                                                              position: absolute;
-                                                              top: 50%;
-                                                              left: 50%;
-                                                              width: 80px;
-                                                              height: 80px;
-                                                              background: red
-                                                                url("https://www.transparenttextures.com/patterns/az-subtle.png");
 
-                                                              clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
-                                                              transform: translate(-50%, -50%);
-                                                              z-index: 10;
-                                                              cursor: pointer;
-                                                              box-shadow: 0 0 12px rgba(255, 0, 0, 0.6);
-                                                              animation: pulseHex 2.2s ease-in-out infinite,
-                                                                spinHex 3s linear infinite;
-                                                            }
+      .oculus-container {
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        overflow: hidden;
+        cursor: pointer;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -350%);
+        z-index: 10;
+        box-shadow: 0 0 30px rgba(255, 255, 255, 0.15);
+      }
 
-                                                            @keyframes spinHex {
-                                                              from {
-                                                                transform: translate(-50%, -50%) rotate(0deg);
-                                                              }
-                                                              to {
-                                                                transform: translate(-50%, -50%) rotate(360deg);
-                                                              }
-                                                            }
-                                                            @keyframes rotate3D {
-                                                              0% {
-                                                                transform: translate(-50%, -50%) rotateX(0deg) rotateY(0deg);
-                                                              }
-                                                              50% {
-                                                                transform: translate(-50%, -50%) rotateX(15deg) rotateY(15deg);
-                                                              }
-                                                              100% {
-                                                                transform: translate(-50%, -50%) rotateX(0deg) rotateY(0deg);
-                                                              }
-                                                            }
+      .oculus-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
 
-                                                            @keyframes pulseHex {
-                                                              0%,
-                                                              100% {
-                                                                transform: translate(-50%, -50%) scale(1);
-                                                                box-shadow: 0 0 12px rgba(255, 0, 0, 0.5);
-                                                              }
-                                                              50% {
-                                                                transform: translate(-50%, -50%) scale(1.07);
-                                                                box-shadow: 0 0 22px rgba(255, 0, 0, 0.8);
-                                                              }
-                                                            }
+      .image-reveal {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -250%);
+        z-index: 5;
+        display: none;
+        cursor: pointer;
+      }
 
-                                                            .image-reveal {
-                                                              position: absolute;
-                                                              top: 50%;
-                                                              left: 50%;
-                                                              transform: translate(-50%, -120%);
-                                                              z-index: 5;
-                                                              display: none;
-                                                              cursor: pointer;
-                                                            }
+      .image-reveal img {
+        max-width: 500px;
+        max-height: 420px;
+        display: block;
+      }
 
-                                                            .image-reveal img {
-                                                              max-width: 500px;
-                                                              max-height: 420px;
-                                                              display: block;
-                                                            }
+      .floating-image {
+        position: absolute;
+        width: 200px;
+        opacity: 0.6;
+        transition: all 0.2s ease;
+        animation: float 6s ease-in-out infinite alternate;
+        z-index: 4;
+        pointer-events: auto;
+        box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+        cursor: grab;
+      }
 
-                                                            .floating-image {
-                                                              position: absolute;
-                                                              width: 200px;
-                                                              opacity: 0.6;
-                                                              transition: opacity 0.6s ease, transform 0.4s ease, left 0.4s ease,
-                                                                top 0.4s ease, width 0.4s ease;
-                                                              animation: float 6s ease-in-out infinite alternate;
-                                                              z-index: 4;
-                                                              pointer-events: auto;
-                                                              box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+      .floating-image.grabbed {
+        animation: none;
+        cursor: grabbing;
+        z-index: 20;
+      }
 
-                                                            }
+      @keyframes float {
+        0% {
+          transform: translateY(0px);
+        }
+        100% {
+          transform: translateY(10px);
+        }
+      }
 
-                                                            .floating-image.focused {
-                    transform: scale(1.5);
-                    z-index: 25;
-                    opacity: 1;
-                    filter: drop-shadow(0 0 30px rgba(255,255,255,0.4)) brightness(1.5) contrast(1.4);
+      .reset-button {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 30px;
+        height: 30px;
+        background: white;
+        clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
+        cursor: pointer;
+        z-index: 20;
+      }
 
-                    box-shadow: 0 0 40px rgba(255, 255, 255, 0.35);
-                    transition: all 0.4s ease;
-                  }
+      .focus-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 15;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.4s ease;
+      }
 
+      .focus-overlay.visible {
+        opacity: 1;
+      }
 
-
-
-
-                                                            @keyframes float {
-                                                              0% {
-                                                                transform: translateY(0px);
-                                                              }
-                                                              100% {
-                                                                transform: translateY(10px);
-                                                              }
-                                                            }
-
-                                                            .reset-button {
-                                                              position: fixed;
-                                                              bottom: 20px;
-                                                              right: 20px;
-                                                              width: 30px;
-                                                              height: 30px;
-                                                              background: white;
-                                                              clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
-                                                              cursor: pointer;
-                                                              z-index: 20;
-                                                              animation: pulseWhite 2s infinite ease-in-out;
-                                                            }
-                                                            .focus-overlay {
-                                                              position: absolute;
-                                                              top: 0;
-                                                              left: 0;
-                                                              width: 100%;
-                                                              height: 100%;
-                                                              background: rgba(0, 0, 0, 0.5);
-                                                              z-index: 15;
-                                                              opacity: 0;
-                                                              pointer-events: none;
-                                                              transition: opacity 0.4s ease;
-                                                            }
-                                                            .focus-overlay.visible {
-                                                              opacity: 1;
-                                                            }
-                                                            .floating-image.blurred {
-                                                              filter: blur(2px);
-                                                              opacity: 0.3;
-                                                              transition: filter 0.4s ease, opacity 0.4s ease;
-                                                            }
-
-                                                            @keyframes pulseWhite {
-                                                              0%,
-                                                              100% {
-                                                                transform: scale(1);
-                                                                opacity: 0.7;
-                                                              }
-                                                              50% {
-                                                                transform: scale(1.1);
-                                                                opacity: 1;
-                                                              }
-                                                            }
-
-                                                            .hide {
-                                                              display: none !important;
-                                                            }
-                                                            .oculus-background {
-                                                  position: fixed;
-                                                  top: 0;
-                                                  left: 0;
-                                                  width: 100vw;
-                                                  height: 100vh;
-                                                  background: url("https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExZHUweTdrYTB5cHprYnBhaDIxaTJtbnJ1bng3aTg5NWF4bGF0YTFsaCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/AxVvjYP5ruIj3FfrS8/giphy.gif") no-repeat center center;
-                                                  background-size: cover;
-                                                  opacity: 0;
-                                                  transition: opacity 0.6s ease;
-                                                  z-index: 1;
-                                                  pointer-events: none;
-                                                }
+      .floating-image.blurred {
+        filter: blur(2px);
+        opacity: 0.3;
+      }
     </style>
   </head>
-  <body class="with-gif">
+  <body>
     <div class="container">
       <div class="oculus-container" id="oculusBtn">
         <img
           src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExZHUweTdrYTB5cHprYnBhaDIxaTJtbnJ1bng3aTg5NWF4bGF0YTFsaCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/AxVvjYP5ruIj3FfrS8/giphy.gif"
-          alt="Oculus animé"
+          alt="Oculus"
         />
       </div>
-      <div class="light-shadow"></div>
       <div class="image-reveal" id="imageReveal">
         <img
           src="https://www.moma.org/s/ge/collection_images/resized/459/w500h420/CRI_176459.jpg"
-          alt="Mnémosyne - Warburg"
+          alt="Contemplatio"
         />
       </div>
-      <div class="reset-button" onclick="location.reload()"></div>
       <div class="focus-overlay" id="focusOverlay"></div>
+      <div class="reset-button" onclick="location.reload()"></div>
     </div>
 
     <script>
@@ -272,10 +154,21 @@
         "https://revue-acropolis.com/wp-content/uploads/sites/20/2023/08/321.Memoire-Renaissance.theatre_de_memoire_Giulio_Camillo_Delminio-780x470.jpg",
         "https://d-fiction.fr/wp-content/uploads/2021/12/Boutonnet-Mof-Image2.jpg",
         "https://fydn.imgix.net/m/x1000/135152dc-73a2-422a-a37a-6ed3e3af25ed.jpg?q=75&auto=format,compress&w=980&dpr=1",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Ein_Augur.jpg/1024px-Ein_Augur.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Georges_de_La_Tour_007.jpg/800px-Georges_de_La_Tour_007.jpg",
+        "https://www.guggenheim.org/wp-content/uploads/1974/01/92.4177_cu_web-1.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Simeon_Stylites_%28Syria%29.jpg/800px-Simeon_Stylites_%28Syria%29.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/4/43/Column_of_St_Simeon_The_Stylite.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Anatome_Animalium_frontispiece.jpg/800px-Anatome_Animalium_frontispiece.jpg",
+        "https://www.rhuthmos.eu/IMG/jpg/-1085.jpg",
+        "https://galeriejoseph.com/wp-content/uploads/2023/11/galeriejoseph.com-claudio-parmiggiani-ce-vide-fait-dinfini-acumen-magazine-artiste-claudio-parmiggiani-livres-1536x1152.jpg",
+        "https://www.centrepompidou.fr/fileadmin/_processed_/2/5/csm_20201020-matisse-expo-collioure-porte_442f265813.jpg",
+        "https://curieuseshistoires-belgique.be/wp-content/uploads/2019/03/Andre%CC%81-Ve%CC%81sale.jpg",
       ];
 
       const placedPositions = [];
       let currentImageIndex = 0;
+      let grabbedImage = null;
 
       document.getElementById("oculusBtn").addEventListener("click", () => {
         document.getElementById("oculusBtn").style.display = "none";
@@ -289,115 +182,58 @@
         const newImg = document.createElement("img");
         newImg.src = imageList[currentImageIndex];
         newImg.className = "floating-image";
+        newImg.dataset.zoomed = "false";
 
-        const scale = 0.9 + Math.random() * 0.3;
-        const opacity = 0.4 + Math.random() * 0.5;
-        const duration = 4 + Math.random() * 6;
-
-        newImg.style.opacity = opacity;
-        newImg.style.transform = `scale(${scale})`;
-        newImg.style.animationDuration = `${duration}s`;
-
-        const centerX = container.offsetWidth / 2;
-        const centerY = container.offsetHeight / 2;
-
-        let attempts = 0;
-        let placed = false;
-
-        while (!placed && attempts < 100) {
-          const angle = (currentImageIndex * 137.5 + attempts * 5) % 360;
-          const radius = 200 + currentImageIndex * 35 + Math.random() * 30;
-
-          const rad = angle * (Math.PI / 180);
-          const offsetX = (Math.random() - 0.5) * 40;
-          const offsetY = (Math.random() - 0.5) * 40;
-
-          const posX = centerX + radius * Math.cos(rad) + offsetX - 100;
-          const posY = centerY + radius * Math.sin(rad) + offsetY - 100;
-
-          const finalX = Math.max(
-            0,
-            Math.min(posX, container.offsetWidth - 200)
-          );
-          const finalY = Math.max(
-            0,
-            Math.min(posY, container.offsetHeight - 200)
-          );
-
-          const tooClose = placedPositions.some((pos) => {
-            const dx = finalX - pos.x;
-            const dy = finalY - pos.y;
-            return Math.sqrt(dx * dx + dy * dy) < 160;
-          });
-
-          const distCenter = Math.sqrt(
-            Math.pow(finalX + 100 - centerX, 2) +
-              Math.pow(finalY + 100 - centerY, 2)
-          );
-
-          if (!tooClose && distCenter > 250) {
-            newImg.style.left = `${finalX}px`;
-            newImg.style.top = `${finalY}px`;
-            placedPositions.push({ x: finalX, y: finalY });
-            placed = true;
-          }
-
-          attempts++;
-        }
-
+        let x = Math.random() * (window.innerWidth - 200);
+        let y = 200 + Math.random() * window.innerHeight;
+        newImg.style.left = `${x}px`;
+        newImg.style.top = `${y}px`;
         container.appendChild(newImg);
         currentImageIndex++;
 
-        newImg.dataset.originalLeft = newImg.style.left;
-        newImg.dataset.originalTop = newImg.style.top;
-        newImg.dataset.focused = "false";
+        // Clic droit : zoom centré
+        newImg.addEventListener("contextmenu", (e) => {
+          e.preventDefault();
 
-        function restoreImage(img) {
-          img.style.left = img.dataset.originalLeft;
-          img.style.top = img.dataset.originalTop;
-          img.style.width = "200px";
-          img.style.transform = "";
-          img.style.zIndex = "4";
-          img.dataset.focused = "false";
+          const isZoomed = newImg.dataset.zoomed === "true";
+          const rect = newImg.getBoundingClientRect();
+          const offsetX = e.clientX - rect.left;
+          const offsetY = e.clientY - rect.top;
+          const percentX = (offsetX / newImg.offsetWidth) * 100;
+          const percentY = (offsetY / newImg.offsetHeight) * 100;
 
-          // 🔴 Masquer le fond sombre
-          document.getElementById("focusOverlay").classList.remove("visible");
+          newImg.style.transformOrigin = `${percentX}% ${percentY}%`;
 
-          // 🔵 Supprimer le flou des autres images
-          document.querySelectorAll(".floating-image").forEach((el) => {
-            el.classList.remove("blurred");
-          });
-        }
+          if (!isZoomed) {
+            newImg.style.transform = "scale(1.5)";
+            newImg.dataset.zoomed = "true";
+          } else {
+            newImg.style.transform = "scale(1)";
+            newImg.dataset.zoomed = "false";
+          }
+        });
+
+        // Clic gauche : attraper / relâcher
+        let isGrabbed = false;
+        const followMouse = (e) => {
+          if (isGrabbed) {
+            newImg.style.left = `${e.clientX - newImg.offsetWidth / 2}px`;
+            newImg.style.top = `${e.pageY - newImg.offsetHeight / 2}px`;
+          }
+        };
 
         newImg.addEventListener("click", (e) => {
+          e.preventDefault();
           e.stopPropagation();
-          const img = e.currentTarget;
-          const isFocused = img.dataset.focused === "true";
-
-          if (!isFocused) {
-            const centerX = container.offsetWidth / 2 - 250;
-            const centerY = container.offsetHeight / 2 - 210;
-            document.getElementById("focusOverlay").classList.add("visible");
-
-            // Flouter les autres images
-            document.querySelectorAll(".floating-image").forEach((el) => {
-              if (el !== img) el.classList.add("blurred");
-            });
-
-            img.style.left = `${centerX}px`;
-            img.style.top = `${centerY}px`;
-            img.style.width = "500px";
-            img.style.transform = "scale(1)";
-            img.style.zIndex = "20";
-            img.style.opacity = "1";
-            img.dataset.focused = "true";
+          isGrabbed = !isGrabbed;
+          newImg.classList.toggle("grabbed", isGrabbed);
+          if (isGrabbed) {
+            document.addEventListener("mousemove", followMouse);
           } else {
-            restoreImage(img);
-            document.getElementById("focusOverlay").classList.remove("visible");
+            document.removeEventListener("mousemove", followMouse);
           }
         });
       });
     </script>
-    <audio id="clickSound" src="clic.mp3" preload="auto"></audio>
   </body>
 </html>
