@@ -74,6 +74,32 @@
         cursor: grabbing;
         z-index: 20;
       }
+      .oculus-container.fade-out {
+        transform: translate(-50%, -350%) scale(1.5);
+        opacity: 0;
+        transition: transform 1.6s ease, opacity 1.6s ease;
+      }
+
+      .luminous-fade {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: radial-gradient(
+          circle at center,
+          rgba(255, 255, 255, 0.15),
+          transparent 80%
+        );
+        opacity: 0;
+        z-index: 8;
+        pointer-events: none;
+        transition: opacity 1.6s ease;
+      }
+
+      .luminous-fade.visible {
+        opacity: 1;
+      }
 
       @keyframes float {
         0% {
@@ -135,6 +161,7 @@
       </div>
       <div class="focus-overlay" id="focusOverlay"></div>
       <div class="reset-button" onclick="location.reload()"></div>
+      <div class="luminous-fade" id="luminousFade"></div>
     </div>
 
     <script>
@@ -170,9 +197,23 @@
       let currentImageIndex = 0;
       let grabbedImage = null;
 
-      document.getElementById("oculusBtn").addEventListener("click", () => {
-        document.getElementById("oculusBtn").style.display = "none";
-        document.getElementById("imageReveal").style.display = "block";
+      const oculusBtn = document.getElementById("oculusBtn");
+      const luminousFade = document.getElementById("luminousFade");
+      const imageReveal = document.getElementById("imageReveal");
+
+      oculusBtn.addEventListener("click", () => {
+        oculusBtn.classList.add("fade-out");
+        luminousFade.classList.add("visible");
+
+        setTimeout(() => {
+          oculusBtn.style.display = "none";
+          imageReveal.style.display = "block";
+
+          // Après un second temps, on fait disparaître le halo
+          setTimeout(() => {
+            luminousFade.classList.remove("visible");
+          }, 1200); // ou ajuste à ton goût
+        }, 1600); // attend la fin de l'animation
       });
 
       document.getElementById("imageReveal").addEventListener("click", () => {
@@ -235,5 +276,6 @@
         });
       });
     </script>
+    <audio id="oculusSound" src="URL_DU_SON.mp3" preload="auto"></audio>
   </body>
 </html>
