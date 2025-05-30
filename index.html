@@ -41,6 +41,38 @@
         object-fit: cover;
       }
 
+      .sound-button {
+  position: fixed;
+  bottom: 20px;
+  right: 60px; /* placé à gauche du bouton reset */
+  width: 30px;
+  height: 30px;
+  background: white;
+  clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
+  cursor: pointer;
+  z-index: 20;
+  animation: pulse 1.5s infinite;
+}
+
+.sound-button.playing {
+  background: #ff5555;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
       .image-reveal {
         position: absolute;
         top: 50%;
@@ -161,6 +193,7 @@
       </div>
       <div class="focus-overlay" id="focusOverlay"></div>
       <div class="reset-button" onclick="location.reload()"></div>
+      <div class="sound-button" id="playSoundBtn" title="Lancer le son"></div>
       <div class="luminous-fade" id="luminousFade"></div>
     </div>
 
@@ -276,6 +309,22 @@
         });
       });
     </script>
-    <audio id="oculusSound" src="URL_DU_SON.mp3" preload="auto"></audio>
+    <script>
+  const soundBtn = document.getElementById("playSoundBtn");
+  const sound = document.getElementById("oculusSound");
+
+  sound.loop = true;
+
+  soundBtn.addEventListener("click", () => {
+    if (sound.paused) {
+      sound.play();
+      soundBtn.classList.add("playing");
+    } else {
+      sound.pause();
+      soundBtn.classList.remove("playing");
+    }
+  });
+</script>
+<audio id="oculusSound" src="assets/audio/ambiance-cenacliere-etage.mp3" preload="auto"></audio>
   </body>
 </html>
