@@ -309,7 +309,7 @@
         });
       });
     </script>
-    <script>
+<script>
   const soundBtn = document.getElementById("playSoundBtn");
   const sound = document.getElementById("oculusSound");
 
@@ -317,8 +317,11 @@
 
   soundBtn.addEventListener("click", () => {
     if (sound.paused) {
-      sound.play();
-      soundBtn.classList.add("playing");
+      sound.play().then(() => {
+        soundBtn.classList.add("playing");
+      }).catch((e) => {
+        console.error("Erreur de lecture :", e);
+      });
     } else {
       sound.pause();
       soundBtn.classList.remove("playing");
