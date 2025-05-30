@@ -329,5 +329,26 @@
   });
 </script>
 <audio id="oculusSound" src="assets/audio/ambiance-cenacliere-etage.mp3" preload="auto"></audio>
+    <script>
+  const soundBtn = document.getElementById("playSoundBtn");
+  const sound = document.getElementById("oculusSound");
+
+  sound.loop = true;
+
+  soundBtn.addEventListener("click", () => {
+    if (sound.paused) {
+      sound.play().then(() => {
+        soundBtn.classList.add("playing");
+      }).catch((e) => {
+        console.error("Erreur de lecture :", e);
+      });
+    } else {
+      sound.pause();
+      soundBtn.classList.remove("playing");
+    }
+  });
+</script>
+</body>
+</html>
   </body>
 </html>
