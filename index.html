@@ -233,7 +233,14 @@
       const oculusBtn = document.getElementById("oculusBtn");
       const luminousFade = document.getElementById("luminousFade");
       const imageReveal = document.getElementById("imageReveal");
-oculusBtn.addEventListener("click", () => {
+oculusBtn.addEventListener("click", () => {  // Lancer le son "clic2"
+  const clic2Sound = document.getElementById("clic2Sound");
+  if (clic2Sound) {
+    clic2Sound.currentTime = 0;
+    clic2Sound.play().catch((e) => {
+      console.warn("Son clic2 non lancé", e);
+    });
+  }
   // Lancer le son "clic1"
   const clicSound = document.getElementById("clicSound");
   if (clicSound) {
@@ -320,6 +327,7 @@ oculusBtn.addEventListener("click", () => {
     </script>
 <audio id="oculusSound" src="assets/audio/ambiance-cenacliere-etage.mp3" preload="auto"></audio>
 <audio id="clicSound" src="assets/audio/clic1.mp3" preload="auto"></audio>
+<audio id="clic2Sound" src="assets/audio/clic2.mp3" preload="auto"></audio>
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
