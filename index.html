@@ -327,55 +327,6 @@ document.getElementById("imageReveal").addEventListener("click", () => {
   });
 });
 
-
-  }
-
-        if (currentImageIndex >= imageList.length) return;
-
-        const container = document.querySelector(".container");
-        const newImg = document.createElement("img");
-        newImg.src = imageList[currentImageIndex];
-        newImg.className = "floating-image";
-        newImg.dataset.zoomed = "false";
-
-        let x = Math.random() * (window.innerWidth - 200);
-        let y = 200 + Math.random() * window.innerHeight;
-        newImg.style.left = `${x}px`;
-        newImg.style.top = `${y}px`;
-        container.appendChild(newImg);
-        currentImageIndex++;
-
-        // Clic droit : zoom centré
-        newImg.addEventListener("contextmenu", (e) => {
-          e.preventDefault();
-
-          const isZoomed = newImg.dataset.zoomed === "true";
-          const rect = newImg.getBoundingClientRect();
-          const offsetX = e.clientX - rect.left;
-          const offsetY = e.clientY - rect.top;
-          const percentX = (offsetX / newImg.offsetWidth) * 100;
-          const percentY = (offsetY / newImg.offsetHeight) * 100;
-
-          newImg.style.transformOrigin = `${percentX}% ${percentY}%`;
-
-          if (!isZoomed) {
-            newImg.style.transform = "scale(1.5)";
-            newImg.dataset.zoomed = "true";
-          } else {
-            newImg.style.transform = "scale(1)";
-            newImg.dataset.zoomed = "false";
-          }
-        });
-
-        // Clic gauche : attraper / relâcher
-        let isGrabbed = false;
-        const followMouse = (e) => {
-          if (isGrabbed) {
-            newImg.style.left = `${e.clientX - newImg.offsetWidth / 2}px`;
-            newImg.style.top = `${e.pageY - newImg.offsetHeight / 2}px`;
-          }
-        };
-
 let alreadyClicked = false;
 
 newImg.addEventListener("click", (e) => {
