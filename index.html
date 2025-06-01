@@ -327,31 +327,6 @@ document.getElementById("imageReveal").addEventListener("click", () => {
   });
 });
 
-let alreadyClicked = false;
-
-newImg.addEventListener("click", (e) => {
-  e.preventDefault();
-  e.stopPropagation();
-  isGrabbed = !isGrabbed;
-  newImg.classList.toggle("grabbed", isGrabbed);
-
-  if (isGrabbed) {
-    document.addEventListener("mousemove", followMouse);
-
-    if (!alreadyClicked) {
-      alreadyClicked = true;
-      const clic3Sound = document.getElementById("clic3Sound");
-      if (clic3Sound) {
-        clic3Sound.currentTime = 0;
-        clic3Sound.play().catch((e) => {
-          console.warn("Son clic3 non lancé", e);
-        });
-      }
-    }
-  } else {
-    document.removeEventListener("mousemove", followMouse);
-  }
-});
     </script>
 <audio id="oculusSound" src="assets/audio/ambiance-cenacliere-etage.mp3" preload="auto"></audio>
 <audio id="clicSound" src="assets/audio/clic1.mp3" preload="auto"></audio>
