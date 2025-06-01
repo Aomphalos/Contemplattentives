@@ -233,14 +233,7 @@
       const oculusBtn = document.getElementById("oculusBtn");
       const luminousFade = document.getElementById("luminousFade");
       const imageReveal = document.getElementById("imageReveal");
-oculusBtn.addEventListener("click", () => {  // Lancer le son "clic2"
-  const clic2Sound = document.getElementById("clic2Sound");
-  if (clic2Sound) {
-    clic2Sound.currentTime = 0;
-    clic2Sound.play().catch((e) => {
-      console.warn("Son clic2 non lancé", e);
-    });
-  }
+oculusBtn.addEventListener("click", () => {
   // Lancer le son "clic1"
   const clicSound = document.getElementById("clicSound");
   if (clicSound) {
@@ -265,7 +258,15 @@ oculusBtn.addEventListener("click", () => {  // Lancer le son "clic2"
 });
 
 
-      document.getElementById("imageReveal").addEventListener("click", () => {
+      document.getElementById("imageReveal").addEventListener("click", () => {  // Lancer le son "clic2"
+  const clic2Sound = document.getElementById("clic2Sound");
+  if (clic2Sound) {
+    clic2Sound.currentTime = 0;
+    clic2Sound.play().catch((e) => {
+      console.warn("Son clic2 non lancé", e);
+    });
+  }
+
         if (currentImageIndex >= imageList.length) return;
 
         const container = document.querySelector(".container");
