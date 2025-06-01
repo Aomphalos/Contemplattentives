@@ -331,14 +331,6 @@ oculusBtn.addEventListener("click", () => {
   });
 });
 
-
-      document.getElementById("imageReveal").addEventListener("click", () => {  // Lancer le son "clic2"
-  const clic2Sound = document.getElementById("clic2Sound");
-  if (clic2Sound) {
-    clic2Sound.currentTime = 0;
-    clic2Sound.play().catch((e) => {
-      console.warn("Son clic2 non lancé", e);
-    });
   }
 
         if (currentImageIndex >= imageList.length) return;
