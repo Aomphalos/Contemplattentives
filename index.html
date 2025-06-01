@@ -249,7 +249,12 @@
     ];
 
     let currentImageIndex = 0;
-let textAlreadyShown = false;
+const textSnippets = [
+  "Le nombre de temples étant limité par la tradition à 20 736 sections de 1 mètre carré chacune, il n’est pas possible d’assigner un temple supplémentaire dans l’hypothèse où, à un moment ou à un autre du temps, la totalité des temples est déjà contemplée par.",
+  "Dans le cas où la totalité des temples est assignée, les contemplattentives, c’est-à-dire les disciples du Courant Contemplatif qui n’ont pas encore de temples assignés attendent la mort d’une contemplatives. Ensuite, le Conclave Contemplatif assigne aux contemplattentives considérées comme les plus avancées dans l’Attente le temple-déserté-par-la-mort.",
+  "L’assignation d’un temple est définitive et le temple devient, à partir du moment de son assignation, un élément constitutif de l’identité mouvante de la contemplatrice.",
+  "La plupart des contemplattentives entrent en Contemplation Active autour de l’âge de 35 ans, mais il n’existe pas, à ce sujet, de règle établie."
+];
 
     const oculusBtn = document.getElementById("oculusBtn");
     const luminousFade = document.getElementById("luminousFade");
@@ -300,42 +305,45 @@ imageReveal.addEventListener("click", () => {
   }
 
 // 🔀 Parfois, au lieu d'une image, on montre du texte (20% de chance) — mais une seule fois
-const isTextInstead = !textAlreadyShown && Math.random() < 0.2;
+const isTextInstead = textSnippets.length > 0 && Math.random() < 0.2;
 
   const container = document.querySelector(".container");
 
-  if (isTextInstead) {
-    const textBox = document.createElement("div");
-    textBox.className = "floating-text";
-    textBox.textContent = "Le nombre de temples étant limité par la tradition à 20 736 sections de 1 mètre carré chacune, il n’est pas possible d’assigner un temple supplémentaire dans l’hypothèse où, à un moment ou à un autre du temps, la totalité des temples est déjà contemplée par.";
+ if (isTextInstead) {
+  const container = document.querySelector(".container");
 
-    let x = Math.random() * (window.innerWidth - 260);
-    let y = 200 + Math.random() * window.innerHeight;
-    textBox.style.left = `${x}px`;
-    textBox.style.top = `${y}px`;
-    container.appendChild(textBox);
+  // 📝 Prendre un texte au hasard et le retirer de la liste
+  const randomIndex = Math.floor(Math.random() * textSnippets.length);
+  const selectedText = textSnippets.splice(randomIndex, 1)[0]; // retire du tableau
 
-    textAlreadyShown = true;
+  const textBox = document.createElement("div");
+  textBox.className = "floating-text";
+  textBox.textContent = selectedText;
 
+  let x = Math.random() * (window.innerWidth - 260);
+  let y = 200 + Math.random() * window.innerHeight;
+  textBox.style.left = `${x}px`;
+  textBox.style.top = `${y}px`;
+  container.appendChild(textBox);
 
-    let isGrabbed = false;
-    const followMouse = (e) => {
-      if (isGrabbed) {
-        textBox.style.left = `${e.clientX - textBox.offsetWidth / 2}px`;
-        textBox.style.top = `${e.pageY - textBox.offsetHeight / 2}px`;
-      }
-    };
+  let isGrabbed = false;
+  const followMouse = (e) => {
+    if (isGrabbed) {
+      textBox.style.left = `${e.clientX - textBox.offsetWidth / 2}px`;
+      textBox.style.top = `${e.pageY - textBox.offsetHeight / 2}px`;
+    }
+  };
 
-    textBox.addEventListener("click", (e) => {
-      e.preventDefault();
-      isGrabbed = !isGrabbed;
-      textBox.classList.toggle("grabbed", isGrabbed);
-      if (isGrabbed) {
-        document.addEventListener("mousemove", followMouse);
-      } else {
-        document.removeEventListener("mousemove", followMouse);
-      }
-    });
+  textBox.addEventListener("click", (e) => {
+    e.preventDefault();
+    isGrabbed = !isGrabbed;
+    textBox.classList.toggle("grabbed", isGrabbed);
+    if (isGrabbed) {
+      document.addEventListener("mousemove", followMouse);
+    } else {
+      document.removeEventListener("mousemove", followMouse);
+    }
+  });
 
     return; // 🛑 Ne pas continuer vers image
   }
