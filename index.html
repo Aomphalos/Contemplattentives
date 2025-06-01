@@ -359,5 +359,39 @@ newImg.addEventListener("click", (e) => {
     });
   });
 </script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const oculusBtn = document.getElementById("oculusBtn");
+    const luminousFade = document.getElementById("luminousFade");
+    const imageReveal = document.getElementById("imageReveal");
+
+    if (!oculusBtn) {
+      console.error("❌ oculusBtn introuvable !");
+      return;
+    }
+
+    oculusBtn.addEventListener("click", () => {
+      const clicSound = document.getElementById("clicSound");
+      if (clicSound) {
+        clicSound.currentTime = 0;
+        clicSound.play().catch((e) => {
+          console.warn("Son clic non lancé :", e);
+        });
+      }
+
+      oculusBtn.classList.add("fade-out");
+      luminousFade.classList.add("visible");
+
+      setTimeout(() => {
+        oculusBtn.style.display = "none";
+        imageReveal.style.display = "block";
+
+        setTimeout(() => {
+          luminousFade.classList.remove("visible");
+        }, 1200);
+      }, 1600);
+    });
+  });
+</script>
 </body>
 </html>
