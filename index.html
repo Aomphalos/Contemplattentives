@@ -175,6 +175,27 @@
         filter: blur(2px);
         opacity: 0.3;
       }
+      .floating-text {
+  position: absolute;
+  width: 260px;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.9);
+  color: black;
+  font-family: 'Georgia', serif;
+  font-size: 14px;
+  border-radius: 8px;
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.2);
+  z-index: 4;
+  cursor: grab;
+  line-height: 1.4;
+  opacity: 0.95;
+}
+
+.floating-text.grabbed {
+  cursor: grabbing;
+  z-index: 20;
+}
+
     </style>
   </head>
   <body>
@@ -270,71 +291,106 @@
     });
 
     // 🌌 Clic sur image centrale contemplatio
-    imageReveal.addEventListener("click", () => {
-      const clic2 = document.getElementById("clic2Sound");
-      if (clic2) {
-        clic2.currentTime = 0;
-        clic2.play().catch((e) => console.warn("clic2 non lancé", e));
+imageReveal.addEventListener("click", () => {
+  const clic2 = document.getElementById("clic2Sound");
+  if (clic2) {
+    clic2.currentTime = 0;
+    clic2.play().catch((e) => console.warn("clic2 non lancé", e));
+  }
+
+  // 🔀 Parfois, au lieu d'une image, on montre du texte (20% de chance)
+  const isTextInstead = Math.random() < 0.2;
+
+  const container = document.querySelector(".container");
+
+  if (isTextInstead) {
+    const textBox = document.createElement("div");
+    textBox.className = "floating-text";
+    textBox.textContent = "Le nombre de temples étant limité par la tradition à 20 736 sections de 1 mètre carré chacune, il n’est pas possible d’assigner un temple supplémentaire dans l’hypothèse où, à un moment ou à un autre du temps, la totalité des temples est déjà contemplée par.";
+
+    let x = Math.random() * (window.innerWidth - 260);
+    let y = 200 + Math.random() * window.innerHeight;
+    textBox.style.left = `${x}px`;
+    textBox.style.top = `${y}px`;
+    container.appendChild(textBox);
+
+    let isGrabbed = false;
+    const followMouse = (e) => {
+      if (isGrabbed) {
+        textBox.style.left = `${e.clientX - textBox.offsetWidth / 2}px`;
+        textBox.style.top = `${e.pageY - textBox.offsetHeight / 2}px`;
       }
+    };
 
-      if (currentImageIndex >= imageList.length) return;
-
-      const container = document.querySelector(".container");
-      const newImg = document.createElement("img");
-      newImg.src = imageList[currentImageIndex];
-      newImg.className = "floating-image";
-      newImg.dataset.zoomed = "false";
-
-      let x = Math.random() * (window.innerWidth - 200);
-      let y = 200 + Math.random() * window.innerHeight;
-      newImg.style.left = `${x}px`;
-      newImg.style.top = `${y}px`;
-      container.appendChild(newImg);
-      currentImageIndex++;
-
-      let isGrabbed = false;
-
-      const followMouse = (e) => {
-        if (isGrabbed) {
-          newImg.style.left = `${e.clientX - newImg.offsetWidth / 2}px`;
-          newImg.style.top = `${e.pageY - newImg.offsetHeight / 2}px`;
-        }
-      };
-
-      // 🖱️ Zoom au clic droit
-      newImg.addEventListener("contextmenu", (e) => {
-        e.preventDefault();
-        const rect = newImg.getBoundingClientRect();
-        const offsetX = e.clientX - rect.left;
-        const offsetY = e.clientY - rect.top;
-        const percentX = (offsetX / newImg.offsetWidth) * 100;
-        const percentY = (offsetY / newImg.offsetHeight) * 100;
-        newImg.style.transformOrigin = `${percentX}% ${percentY}%`;
-        const isZoomed = newImg.dataset.zoomed === "true";
-        newImg.style.transform = isZoomed ? "scale(1)" : "scale(1.5)";
-        newImg.dataset.zoomed = (!isZoomed).toString();
-      });
-
-      // ✋ Clic gauche pour attraper / relâcher
-      newImg.addEventListener("click", (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-
-        const clic3 = document.getElementById("clic3Sound");
-        if (clic3) {
-          clic3.currentTime = 0;
-          clic3.play().catch((e) => console.warn("clic3 non lancé", e));
-        }
-
-        isGrabbed = !isGrabbed;
-        newImg.classList.toggle("grabbed", isGrabbed);
-        if (isGrabbed) {
-          document.addEventListener("mousemove", followMouse);
-        } else {
-          document.removeEventListener("mousemove", followMouse);
-        }
-      });
+    textBox.addEventListener("click", (e) => {
+      e.preventDefault();
+      isGrabbed = !isGrabbed;
+      textBox.classList.toggle("grabbed", isGrabbed);
+      if (isGrabbed) {
+        document.addEventListener("mousemove", followMouse);
+      } else {
+        document.removeEventListener("mousemove", followMouse);
+      }
     });
+
+    return; // 🛑 Ne pas continuer vers image
+  }
+
+  // 👇 Partie normale pour afficher une image
+  if (currentImageIndex >= imageList.length) return;
+
+  const newImg = document.createElement("img");
+  newImg.src = imageList[currentImageIndex];
+  newImg.className = "floating-image";
+  newImg.dataset.zoomed = "false";
+
+  let x = Math.random() * (window.innerWidth - 200);
+  let y = 200 + Math.random() * window.innerHeight;
+  newImg.style.left = `${x}px`;
+  newImg.style.top = `${y}px`;
+  container.appendChild(newImg);
+  currentImageIndex++;
+
+  let isGrabbed = false;
+
+  const followMouse = (e) => {
+    if (isGrabbed) {
+      newImg.style.left = `${e.clientX - newImg.offsetWidth / 2}px`;
+      newImg.style.top = `${e.pageY - newImg.offsetHeight / 2}px`;
+    }
+  };
+
+  newImg.addEventListener("contextmenu", (e) => {
+    e.preventDefault();
+    const rect = newImg.getBoundingClientRect();
+    const offsetX = e.clientX - rect.left;
+    const offsetY = e.clientY - rect.top;
+    const percentX = (offsetX / newImg.offsetWidth) * 100;
+    const percentY = (offsetY / newImg.offsetHeight) * 100;
+    newImg.style.transformOrigin = `${percentX}% ${percentY}%`;
+    const isZoomed = newImg.dataset.zoomed === "true";
+    newImg.style.transform = isZoomed ? "scale(1)" : "scale(1.5)";
+    newImg.dataset.zoomed = (!isZoomed).toString();
+  });
+
+  newImg.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const clic3 = document.getElementById("clic3Sound");
+    if (clic3) {
+      clic3.currentTime = 0;
+      clic3.play().catch((e) => console.warn("clic3 non lancé", e));
+    }
+    isGrabbed = !isGrabbed;
+    newImg.classList.toggle("grabbed", isGrabbed);
+    if (isGrabbed) {
+      document.addEventListener("mousemove", followMouse);
+    } else {
+      document.removeEventListener("mousemove", followMouse);
+    }
+  });
+});
+
   });
 </script>
 <!-- Juste avant la fermeture de body -->
