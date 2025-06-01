@@ -326,50 +326,40 @@ newImg.addEventListener("click", (e) => {
     document.removeEventListener("mousemove", followMouse);
   }
 });
-  
-    </script>
-<audio id="oculusSound" src="assets/audio/ambiance-cenacliere-etage.mp3" preload="auto"></audio>
-<audio id="clicSound" src="assets/audio/clic1.mp3" preload="auto"></audio>
-<audio id="clic2Sound" src="assets/audio/clic2.mp3" preload="auto"></audio>
-<audio id="clic3Sound" src="assets/audio/clic3.mp3" preload="auto"></audio>
-
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
     const soundBtn = document.getElementById("playSoundBtn");
     const sound = document.getElementById("oculusSound");
 
-    if (!sound || !soundBtn) {
-      console.error("Élément audio ou bouton introuvable");
-      return;
+    if (sound && soundBtn) {
+      sound.loop = true;
+      soundBtn.addEventListener("click", () => {
+        if (sound.paused) {
+          sound.play().then(() => {
+            soundBtn.classList.add("playing");
+          }).catch((e) => {
+            console.error("Erreur de lecture :", e);
+          });
+        } else {
+          sound.pause();
+          soundBtn.classList.remove("playing");
+        }
+      });
     }
 
-    sound.loop = true;
+    const imageList = [/* ... tes URLs ... */];
+    let currentImageIndex = 0;
 
-    soundBtn.addEventListener("click", () => {
-      if (sound.paused) {
-        sound.play().then(() => {
-          soundBtn.classList.add("playing");
-        }).catch((e) => {
-          console.error("Erreur de lecture :", e);
-        });
-      } else {
-        sound.pause();
-        soundBtn.classList.remove("playing");
-      }
-    });
-  });
-</script>
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
     const oculusBtn = document.getElementById("oculusBtn");
     const luminousFade = document.getElementById("luminousFade");
     const imageReveal = document.getElementById("imageReveal");
 
-    if (!oculusBtn) {
-      console.error("❌ oculusBtn introuvable !");
+    if (!oculusBtn || !imageReveal) {
+      console.error("❌ Éléments introuvables !");
       return;
     }
 
+    // 🎯 Clic sur le GIF Oculus
     oculusBtn.addEventListener("click", () => {
       const clicSound = document.getElementById("clicSound");
       if (clicSound) {
@@ -385,13 +375,80 @@ newImg.addEventListener("click", (e) => {
       setTimeout(() => {
         oculusBtn.style.display = "none";
         imageReveal.style.display = "block";
-
         setTimeout(() => {
           luminousFade.classList.remove("visible");
         }, 1200);
       }, 1600);
     });
+
+    // 🎯 Clic sur l'image "Contemplatio"
+    imageReveal.addEventListener("click", () => {
+      const clic2Sound = document.getElementById("clic2Sound");
+      if (clic2Sound) {
+        clic2Sound.currentTime = 0;
+        clic2Sound.play().catch((e) => {
+          console.warn("Son clic2 non lancé", e);
+        });
+      }
+
+      if (currentImageIndex >= imageList.length) return;
+
+      const container = document.querySelector(".container");
+      const newImg = document.createElement("img");
+      newImg.src = imageList[currentImageIndex];
+      newImg.className = "floating-image";
+      newImg.dataset.zoomed = "false";
+
+      let x = Math.random() * (window.innerWidth - 200);
+      let y = 200 + Math.random() * window.innerHeight;
+      newImg.style.left = `${x}px`;
+      newImg.style.top = `${y}px`;
+      container.appendChild(newImg);
+      currentImageIndex++;
+
+      let isGrabbed = false;
+
+      const followMouse = (e) => {
+        if (isGrabbed) {
+          newImg.style.left = `${e.clientX - newImg.offsetWidth / 2}px`;
+          newImg.style.top = `${e.pageY - newImg.offsetHeight / 2}px`;
+        }
+      };
+
+      newImg.addEventListener("contextmenu", (e) => {
+        e.preventDefault();
+        const rect = newImg.getBoundingClientRect();
+        const offsetX = e.clientX - rect.left;
+        const offsetY = e.clientY - rect.top;
+        const percentX = (offsetX / newImg.offsetWidth) * 100;
+        const percentY = (offsetY / newImg.offsetHeight) * 100;
+        newImg.style.transformOrigin = `${percentX}% ${percentY}%`;
+        const isZoomed = newImg.dataset.zoomed === "true";
+        newImg.style.transform = isZoomed ? "scale(1)" : "scale(1.5)";
+        newImg.dataset.zoomed = (!isZoomed).toString();
+      });
+
+      newImg.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const clic3Sound = document.getElementById("clic3Sound");
+        if (clic3Sound) {
+          clic3Sound.currentTime = 0;
+          clic3Sound.play().catch((e) => {
+            console.warn("Son clic3 non lancé", e);
+          });
+        }
+
+        isGrabbed = !isGrabbed;
+        newImg.classList.toggle("grabbed", isGrabbed);
+        if (isGrabbed) {
+          document.addEventListener("mousemove", followMouse);
+        } else {
+          document.removeEventListener("mousemove", followMouse);
+        }
+      });
+    });
   });
 </script>
-</body>
-</html>
+
