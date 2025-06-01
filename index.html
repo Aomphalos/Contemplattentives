@@ -3,6 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <title>Mnémosyne – Site interactif complet</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cardo&display=swap"
+      rel="stylesheet"
+    />
     <style>
       html,
       body {
@@ -42,36 +46,36 @@
       }
 
       .sound-button {
-  position: fixed;
-  bottom: 20px;
-  right: 60px; /* placé à gauche du bouton reset */
-  width: 30px;
-  height: 30px;
-  background: white;
-  clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
-  cursor: pointer;
-  z-index: 20;
-  animation: pulse 1.5s infinite;
-}
+        position: fixed;
+        bottom: 20px;
+        right: 60px; /* placé à gauche du bouton reset */
+        width: 30px;
+        height: 30px;
+        background: white;
+        clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
+        cursor: pointer;
+        z-index: 20;
+        animation: pulse 1.5s infinite;
+      }
 
-.sound-button.playing {
-  background: #ff5555;
-}
+      .sound-button.playing {
+        background: #ff5555;
+      }
 
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.1);
-    opacity: 0.8;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        50% {
+          transform: scale(1.1);
+          opacity: 0.8;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
 
       .image-reveal {
         position: absolute;
@@ -176,26 +180,28 @@
         opacity: 0.3;
       }
       .floating-text {
-  position: absolute;
-  width: 260px;
-  padding: 14px;
-  background: rgba(0, 0, 0, 0.85);
-  color: white;
-  font-family: 'Georgia', serif;
-  font-size: 10px;
-  text-align: justify; 
-  border-radius: 8px;
-  z-index: 4;
-  cursor: grab;
-  line-height: 1.4;
-  opacity: 0.95;
-}
+        font-family: "Cardo", serif;
+        font-size: 12px;
+        line-height: 1.4;
+        position: absolute;
+        width: 260px;
+        padding: 14px;
+        background: rgba(0, 0, 0, 0.85);
+        color: white;
+        font-family: "Georgia", serif;
+        font-size: 10px;
+        text-align: justify;
+        border-radius: 8px;
+        z-index: 4;
+        cursor: grab;
+        line-height: 1.4;
+        opacity: 0.95;
+      }
 
-.floating-text.grabbed {
-  cursor: grabbing;
-  z-index: 20;
-}
-
+      .floating-text.grabbed {
+        cursor: grabbing;
+        z-index: 20;
+      }
     </style>
   </head>
   <body>
@@ -218,208 +224,220 @@
       <div class="luminous-fade" id="luminousFade"></div>
     </div>
 
-   <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const imageList = [
-      "https://acces.ens-lyon.fr/acces/thematiques/limites/ecoles/parcours/chartreuse/img/profil_5.jpg",
-      "https://acces.ens-lyon.fr/acces/thematiques/limites/ecoles/parcours/chartreuse/img/figures_coupe_copie.jpg",
-      "https://infoterre.brgm.fr/sites/default/files/upload/a_cgeo050_0749_1_jpg_0.jpg",
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Artemistempleplan.jpg/960px-Artemistempleplan.jpg",
-      "https://www.meisterdrucke.fr/kunstwerke/1260px/Unknown_Artist_-_Cross_section_of_the_earth_crust_allowing_Athanasius_Kircher_to_demonstrate_the_-_%28MeisterDrucke-949340%29.jpg",
-      "https://i.la-croix.com/836x/smart/croire/2015/11/27/1700874510/LAnnonciation-Fra-Angelico-Musee-Prado-Madrid_0.jpg",
-      "https://www.hqe.guidenr.fr/images/couches-thermiques-atmosphere.jpg",
-      "https://upload.wikimedia.org/wikipedia/commons/6/62/Bilma-Saline-85.jpg",
-      "https://pouvoirsafrique.com/pouvoirsafrique/uploads/images/2025/01/08/12169.png",
-      "https://polinacouture.com/wp-content/uploads/2022/04/intro-art-aborigene.jpg",
-      "https://images.squarespace-cdn.com/content/v1/577b0a48e4fcb599ceaf2072/1570968992861-QO3JECLJZ0B519EX61VK/Armando+Veve+encore+plus+petit.jpg?format=2500w",
-      "https://culturellementvotre.fr/wp-content/uploads/2020/10/palais-mental-1-810x552.jpg",
-      "https://revue-acropolis.com/wp-content/uploads/sites/20/2023/08/321.Memoire-Renaissance.theatre_de_memoire_Giulio_Camillo_Delminio-780x470.jpg",
-      "https://d-fiction.fr/wp-content/uploads/2021/12/Boutonnet-Mof-Image2.jpg",
-      "https://fydn.imgix.net/m/x1000/135152dc-73a2-422a-a37a-6ed3e3af25ed.jpg?q=75&auto=format,compress&w=980&dpr=1",
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Ein_Augur.jpg/1024px-Ein_Augur.jpg",
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Georges_de_La_Tour_007.jpg/800px-Georges_de_La_Tour_007.jpg",
-      "https://www.guggenheim.org/wp-content/uploads/1974/01/92.4177_cu_web-1.jpg",
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Simeon_Stylites_%28Syria%29.jpg/800px-Simeon_Stylites_%28Syria%29.jpg",
-      "https://upload.wikimedia.org/wikipedia/commons/4/43/Column_of_St_Simeon_The_Stylite.jpg",
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Anatome_Animalium_frontispiece.jpg/800px-Anatome_Animalium_frontispiece.jpg",
-      "https://www.rhuthmos.eu/IMG/jpg/-1085.jpg",
-      "https://galeriejoseph.com/wp-content/uploads/2023/11/galeriejoseph.com-claudio-parmiggiani-ce-vide-fait-dinfini-acumen-magazine-artiste-claudio-parmiggiani-livres-1536x1152.jpg",
-      "https://www.centrepompidou.fr/fileadmin/_processed_/2/5/csm_20201020-matisse-expo-collioure-porte_442f265813.jpg",
-      "https://curieuseshistoires-belgique.be/wp-content/uploads/2019/03/Andre%CC%81-Ve%CC%81sale.jpg",
-    ];
-
-    let currentImageIndex = 0;
-const textSnippets = [
-  "Le nombre de temples étant limité par la tradition à 20 736 sections de 1 mètre carré chacune, il n’est pas possible d’assigner un temple supplémentaire dans l’hypothèse où, à un moment ou à un autre du temps, la totalité des temples est déjà contemplée par.",
-  "Dans le cas où la totalité des temples est assignée, les contemplattentives, c’est-à-dire les disciples du Courant Contemplatif qui n’ont pas encore de temples assignés attendent la mort d’une contemplatives. Ensuite, le Conclave Contemplatif assigne aux contemplattentives considérées comme les plus avancées dans l’Attente le temple-déserté-par-la-mort.",
-  "L’assignation d’un temple est définitive et le temple devient, à partir du moment de son assignation, un élément constitutif de l’identité mouvante de la contemplatrice.",
-  "La plupart des contemplattentives entrent en Contemplation Active autour de l’âge de 35 ans, mais il n’existe pas, à ce sujet, de règle établie.",
-  "La Somme encyclopédique d’Amara Dabo, représentante la plus célèbre du Courant Contemplatif, ayant été perdue, personne, ou presque, ne sait plus rien de ce groupe, constitué pourtant de plusieurs milliers de membres qui, durant tout le XXIIe siècle, se vouèrent à l’étude opiniâtre de mètre carré consacré par la tradition.",
-  "De cette Somme, donc, nous ne possédons plus aujourd’hui qu’une centaine d’enregistrements audio. Ce contenu, qui représente déjà plus de deux cent heures d’écoute, est la lecture, par Amara Dabo elle-même, de l’Introduction Générale de sa Somme : Introduction contenant non seulement une présentation globale du Courant Contemplatif, de son fonctionnement à sa fragmentation finale, à la toute fin du XXIIe siècle, en passant par la lecture selon le Canon Contemplatif de plusieurs contemplationes.",
-  "Notre présente édition est la retranscription des enregistrements d’Amara Dabo, suivi d’une étude de Nor Do sur les conséquences potentielles du Courant Contemplatif sur la philosophie de l’espace et du lieu qui a, nous le savons, été particulièrement décisive dans certaines constructions théorico-poétiques à l’oeuvre dans les fameuses broderies de l’Arché-Tokyo.",
-  "Précisons, à tout fin utile, qu’une telle retranscription ne pourra jamais rendre compte du contenu effectif des enregistrements de Dabo.",
-  "Le Courant Contemplatif accordait une place déterminante à l’élocution, au ton, à la prosodie et, contrairement à l’antique rationalité, le discours contemplatif n’est pas fondée sur le fantasme d’une dichotomie entre signifiant et signifié, entre concepts et retranscription du concept, mais bien sur l’unité fondamentale de la chair-parole (pour une étude plus approfondie de cette question, nous vous invitons à lire le chapitre 67 de l’étude de Nor Do où il est justement question d’une étude de la chair-parole contemplative)."
-
-
-
-];
-
-    const oculusBtn = document.getElementById("oculusBtn");
-    const luminousFade = document.getElementById("luminousFade");
-    const imageReveal = document.getElementById("imageReveal");
-    const soundBtn = document.getElementById("playSoundBtn");
-    const sound = document.getElementById("oculusSound");
-
-    // 🎵 bouton son
-    if (sound && soundBtn) {
-      sound.loop = true;
-      soundBtn.addEventListener("click", () => {
-        if (sound.paused) {
-          sound.play().then(() => {
-            soundBtn.classList.add("playing");
-          }).catch((e) => console.error("Erreur lecture :", e));
-        } else {
-          sound.pause();
-          soundBtn.classList.remove("playing");
-        }
-      });
-    }
-
-    // 🌀 Clic sur oculus
-    oculusBtn.addEventListener("click", () => {
-      const clic1 = document.getElementById("clicSound");
-      if (clic1) {
-        clic1.volume = 0.1; // Réduit le volume (entre 0 et 1)
-        clic1.currentTime = 0;
-        clic1.play().catch((e) => console.warn("clic1 non lancé", e));
+    <script>
+      function typeText(element, text, delay = 20) {
+        let i = 0;
+        element.textContent = "";
+        const interval = setInterval(() => {
+          element.textContent += text.charAt(i);
+          i++;
+          if (i >= text.length) clearInterval(interval);
+        }, delay);
       }
+      document.addEventListener("DOMContentLoaded", () => {
+        const imageList = [
+          "https://acces.ens-lyon.fr/acces/thematiques/limites/ecoles/parcours/chartreuse/img/profil_5.jpg",
+          "https://acces.ens-lyon.fr/acces/thematiques/limites/ecoles/parcours/chartreuse/img/figures_coupe_copie.jpg",
+          "https://infoterre.brgm.fr/sites/default/files/upload/a_cgeo050_0749_1_jpg_0.jpg",
+          "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Artemistempleplan.jpg/960px-Artemistempleplan.jpg",
+          "https://www.meisterdrucke.fr/kunstwerke/1260px/Unknown_Artist_-_Cross_section_of_the_earth_crust_allowing_Athanasius_Kircher_to_demonstrate_the_-_%28MeisterDrucke-949340%29.jpg",
+          "https://i.la-croix.com/836x/smart/croire/2015/11/27/1700874510/LAnnonciation-Fra-Angelico-Musee-Prado-Madrid_0.jpg",
+          "https://www.hqe.guidenr.fr/images/couches-thermiques-atmosphere.jpg",
+          "https://upload.wikimedia.org/wikipedia/commons/6/62/Bilma-Saline-85.jpg",
+          "https://pouvoirsafrique.com/pouvoirsafrique/uploads/images/2025/01/08/12169.png",
+          "https://polinacouture.com/wp-content/uploads/2022/04/intro-art-aborigene.jpg",
+          "https://images.squarespace-cdn.com/content/v1/577b0a48e4fcb599ceaf2072/1570968992861-QO3JECLJZ0B519EX61VK/Armando+Veve+encore+plus+petit.jpg?format=2500w",
+          "https://culturellementvotre.fr/wp-content/uploads/2020/10/palais-mental-1-810x552.jpg",
+          "https://revue-acropolis.com/wp-content/uploads/sites/20/2023/08/321.Memoire-Renaissance.theatre_de_memoire_Giulio_Camillo_Delminio-780x470.jpg",
+          "https://d-fiction.fr/wp-content/uploads/2021/12/Boutonnet-Mof-Image2.jpg",
+          "https://fydn.imgix.net/m/x1000/135152dc-73a2-422a-a37a-6ed3e3af25ed.jpg?q=75&auto=format,compress&w=980&dpr=1",
+          "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Ein_Augur.jpg/1024px-Ein_Augur.jpg",
+          "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Georges_de_La_Tour_007.jpg/800px-Georges_de_La_Tour_007.jpg",
+          "https://www.guggenheim.org/wp-content/uploads/1974/01/92.4177_cu_web-1.jpg",
+          "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Simeon_Stylites_%28Syria%29.jpg/800px-Simeon_Stylites_%28Syria%29.jpg",
+          "https://upload.wikimedia.org/wikipedia/commons/4/43/Column_of_St_Simeon_The_Stylite.jpg",
+          "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Anatome_Animalium_frontispiece.jpg/800px-Anatome_Animalium_frontispiece.jpg",
+          "https://www.rhuthmos.eu/IMG/jpg/-1085.jpg",
+          "https://galeriejoseph.com/wp-content/uploads/2023/11/galeriejoseph.com-claudio-parmiggiani-ce-vide-fait-dinfini-acumen-magazine-artiste-claudio-parmiggiani-livres-1536x1152.jpg",
+          "https://www.centrepompidou.fr/fileadmin/_processed_/2/5/csm_20201020-matisse-expo-collioure-porte_442f265813.jpg",
+          "https://curieuseshistoires-belgique.be/wp-content/uploads/2019/03/Andre%CC%81-Ve%CC%81sale.jpg",
+        ];
 
-      oculusBtn.classList.add("fade-out");
-      luminousFade.classList.add("visible");
-      setTimeout(() => {
-        oculusBtn.style.display = "none";
-        imageReveal.style.display = "block";
-        setTimeout(() => {
-          luminousFade.classList.remove("visible");
-        }, 1200);
-      }, 1600);
-    });
+        let currentImageIndex = 0;
+        const textSnippets = [
+          "Le nombre de temples étant limité par la tradition à 20 736 sections de 1 mètre carré chacune, il n’est pas possible d’assigner un temple supplémentaire dans l’hypothèse où, à un moment ou à un autre du temps, la totalité des temples est déjà contemplée par.",
+          "Dans le cas où la totalité des temples est assignée, les contemplattentives, c’est-à-dire les disciples du Courant Contemplatif qui n’ont pas encore de temples assignés attendent la mort d’une contemplatives. Ensuite, le Conclave Contemplatif assigne aux contemplattentives considérées comme les plus avancées dans l’Attente le temple-déserté-par-la-mort.",
+          "L’assignation d’un temple est définitive et le temple devient, à partir du moment de son assignation, un élément constitutif de l’identité mouvante de la contemplatrice.",
+          "La plupart des contemplattentives entrent en Contemplation Active autour de l’âge de 35 ans, mais il n’existe pas, à ce sujet, de règle établie.",
+          "La Somme encyclopédique d’Amara Dabo, représentante la plus célèbre du Courant Contemplatif, ayant été perdue, personne, ou presque, ne sait plus rien de ce groupe, constitué pourtant de plusieurs milliers de membres qui, durant tout le XXIIe siècle, se vouèrent à l’étude opiniâtre de mètre carré consacré par la tradition.",
+          "De cette Somme, donc, nous ne possédons plus aujourd’hui qu’une centaine d’enregistrements audio. Ce contenu, qui représente déjà plus de deux cent heures d’écoute, est la lecture, par Amara Dabo elle-même, de l’Introduction Générale de sa Somme : Introduction contenant non seulement une présentation globale du Courant Contemplatif, de son fonctionnement à sa fragmentation finale, à la toute fin du XXIIe siècle, en passant par la lecture selon le Canon Contemplatif de plusieurs contemplationes.",
+          "Notre présente édition est la retranscription des enregistrements d’Amara Dabo, suivi d’une étude de Nor Do sur les conséquences potentielles du Courant Contemplatif sur la philosophie de l’espace et du lieu qui a, nous le savons, été particulièrement décisive dans certaines constructions théorico-poétiques à l’oeuvre dans les fameuses broderies de l’Arché-Tokyo.",
+          "Précisons, à tout fin utile, qu’une telle retranscription ne pourra jamais rendre compte du contenu effectif des enregistrements de Dabo.",
+          "Le Courant Contemplatif accordait une place déterminante à l’élocution, au ton, à la prosodie et, contrairement à l’antique rationalité, le discours contemplatif n’est pas fondée sur le fantasme d’une dichotomie entre signifiant et signifié, entre concepts et retranscription du concept, mais bien sur l’unité fondamentale de la chair-parole (pour une étude plus approfondie de cette question, nous vous invitons à lire le chapitre 67 de l’étude de Nor Do où il est justement question d’une étude de la chair-parole contemplative).",
+        ];
 
-    // 🌌 Clic sur image centrale contemplatio
-imageReveal.addEventListener("click", () => {
-const clic2 = document.getElementById("clic2Sound");
-if (clic2) {
-  clic2.volume = 0.1; // ✅ bon volume réglé
-  clic2.currentTime = 0;
-  clic2.play().catch((e) => console.warn("clic2 non lancé", e));
-}
+        const oculusBtn = document.getElementById("oculusBtn");
+        const luminousFade = document.getElementById("luminousFade");
+        const imageReveal = document.getElementById("imageReveal");
+        const soundBtn = document.getElementById("playSoundBtn");
+        const sound = document.getElementById("oculusSound");
 
-// 🔀 Parfois, au lieu d'une image, on montre du texte (20% de chance) — mais une seule fois
-const isTextInstead = textSnippets.length > 0 && Math.random() < 0.2;
+        // 🎵 bouton son
+        if (sound && soundBtn) {
+          sound.loop = true;
+          soundBtn.addEventListener("click", () => {
+            if (sound.paused) {
+              sound
+                .play()
+                .then(() => {
+                  soundBtn.classList.add("playing");
+                })
+                .catch((e) => console.error("Erreur lecture :", e));
+            } else {
+              sound.pause();
+              soundBtn.classList.remove("playing");
+            }
+          });
+        }
 
-  const container = document.querySelector(".container");
+        // 🌀 Clic sur oculus
+        oculusBtn.addEventListener("click", () => {
+          const clic1 = document.getElementById("clicSound");
+          if (clic1) {
+            clic1.volume = 0.1; // Réduit le volume (entre 0 et 1)
+            clic1.currentTime = 0;
+            clic1.play().catch((e) => console.warn("clic1 non lancé", e));
+          }
 
- if (isTextInstead) {
-  const container = document.querySelector(".container");
+          oculusBtn.classList.add("fade-out");
+          luminousFade.classList.add("visible");
+          setTimeout(() => {
+            oculusBtn.style.display = "none";
+            imageReveal.style.display = "block";
+            setTimeout(() => {
+              luminousFade.classList.remove("visible");
+            }, 1200);
+          }, 1600);
+        });
 
-  // 📝 Prendre un texte au hasard et le retirer de la liste
-  const randomIndex = Math.floor(Math.random() * textSnippets.length);
-  const selectedText = textSnippets.splice(randomIndex, 1)[0]; // retire du tableau
+        // 🌌 Clic sur image centrale contemplatio
+        imageReveal.addEventListener("click", () => {
+          const clic2 = document.getElementById("clic2Sound");
+          if (clic2) {
+            clic2.volume = 0.1; // ✅ bon volume réglé
+            clic2.currentTime = 0;
+            clic2.play().catch((e) => console.warn("clic2 non lancé", e));
+          }
 
-  const textBox = document.createElement("div");
-  textBox.className = "floating-text";
-  textBox.textContent = selectedText;
+          // 🔀 Parfois, au lieu d'une image, on montre du texte (20% de chance) — mais une seule fois
+          const isTextInstead = textSnippets.length > 0 && Math.random() < 0.2;
 
-  let x = Math.random() * (window.innerWidth - 260);
-  let y = 200 + Math.random() * window.innerHeight;
-  textBox.style.left = `${x}px`;
-  textBox.style.top = `${y}px`;
-  container.appendChild(textBox);
+          const container = document.querySelector(".container");
 
-  let isGrabbed = false;
-  const followMouse = (e) => {
-    if (isGrabbed) {
-      textBox.style.left = `${e.clientX - textBox.offsetWidth / 2}px`;
-      textBox.style.top = `${e.pageY - textBox.offsetHeight / 2}px`;
-    }
-  };
+          if (isTextInstead) {
+            const container = document.querySelector(".container");
 
-  textBox.addEventListener("click", (e) => {
-    e.preventDefault();
-    isGrabbed = !isGrabbed;
-    textBox.classList.toggle("grabbed", isGrabbed);
-    if (isGrabbed) {
-      document.addEventListener("mousemove", followMouse);
-    } else {
-      document.removeEventListener("mousemove", followMouse);
-    }
-  });
+            // 📝 Prendre un texte au hasard et le retirer de la liste
+            const randomIndex = Math.floor(Math.random() * textSnippets.length);
+            const selectedText = textSnippets.splice(randomIndex, 1)[0]; // retire du tableau
 
-    return; // 🛑 Ne pas continuer vers image
-  }
+            const textBox = document.createElement("div");
+            textBox.className = "floating-text";
+            typeText(textBox, selectedText, 18); // tu peux ajuster la vitesse ici
 
-  // 👇 Partie normale pour afficher une image
-  if (currentImageIndex >= imageList.length) return;
+            let x = Math.random() * (window.innerWidth - 260);
+            let y = 200 + Math.random() * window.innerHeight;
+            textBox.style.left = `${x}px`;
+            textBox.style.top = `${y}px`;
+            container.appendChild(textBox);
 
-  const newImg = document.createElement("img");
-  newImg.src = imageList[currentImageIndex];
-  newImg.className = "floating-image";
-  newImg.dataset.zoomed = "false";
+            let isGrabbed = false;
+            const followMouse = (e) => {
+              if (isGrabbed) {
+                textBox.style.left = `${e.clientX - textBox.offsetWidth / 2}px`;
+                textBox.style.top = `${e.pageY - textBox.offsetHeight / 2}px`;
+              }
+            };
 
-  let x = Math.random() * (window.innerWidth - 200);
-  let y = 200 + Math.random() * window.innerHeight;
-  newImg.style.left = `${x}px`;
-  newImg.style.top = `${y}px`;
-  container.appendChild(newImg);
-  currentImageIndex++;
+            textBox.addEventListener("click", (e) => {
+              e.preventDefault();
+              isGrabbed = !isGrabbed;
+              textBox.classList.toggle("grabbed", isGrabbed);
+              if (isGrabbed) {
+                document.addEventListener("mousemove", followMouse);
+              } else {
+                document.removeEventListener("mousemove", followMouse);
+              }
+            });
 
-  let isGrabbed = false;
+            return; // 🛑 Ne pas continuer vers image
+          }
 
-  const followMouse = (e) => {
-    if (isGrabbed) {
-      newImg.style.left = `${e.clientX - newImg.offsetWidth / 2}px`;
-      newImg.style.top = `${e.pageY - newImg.offsetHeight / 2}px`;
-    }
-  };
+          // 👇 Partie normale pour afficher une image
+          if (currentImageIndex >= imageList.length) return;
 
-  newImg.addEventListener("contextmenu", (e) => {
-    e.preventDefault();
-    const rect = newImg.getBoundingClientRect();
-    const offsetX = e.clientX - rect.left;
-    const offsetY = e.clientY - rect.top;
-    const percentX = (offsetX / newImg.offsetWidth) * 100;
-    const percentY = (offsetY / newImg.offsetHeight) * 100;
-    newImg.style.transformOrigin = `${percentX}% ${percentY}%`;
-    const isZoomed = newImg.dataset.zoomed === "true";
-    newImg.style.transform = isZoomed ? "scale(1)" : "scale(1.5)";
-    newImg.dataset.zoomed = (!isZoomed).toString();
-  });
+          const newImg = document.createElement("img");
+          newImg.src = imageList[currentImageIndex];
+          newImg.className = "floating-image";
+          newImg.dataset.zoomed = "false";
 
-  newImg.addEventListener("click", (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const clic3 = document.getElementById("clic3Sound");
-    if (clic3) {
-      clic3.volume = 0.1; // Réduit le volume (entre 0 et 1)
-      clic3.currentTime = 0;
-      clic3.play().catch((e) => console.warn("clic3 non lancé", e));
-    }
-    isGrabbed = !isGrabbed;
-    newImg.classList.toggle("grabbed", isGrabbed);
-    if (isGrabbed) {
-      document.addEventListener("mousemove", followMouse);
-    } else {
-      document.removeEventListener("mousemove", followMouse);
-    }
-  });
-});
+          let x = Math.random() * (window.innerWidth - 200);
+          let y = 200 + Math.random() * window.innerHeight;
+          newImg.style.left = `${x}px`;
+          newImg.style.top = `${y}px`;
+          container.appendChild(newImg);
+          currentImageIndex++;
 
-  });
-</script>
-<!-- Juste avant la fermeture de body -->
-<audio id="oculusSound" src="assets/audio/ambiancemnemozine1.mp3" preload="auto"></audio>
-<audio id="clicSound" src="assets/audio/clic1.mp3" preload="auto"></audio>
-<audio id="clic2Sound" src="assets/audio/clic2.mp3" preload="auto"></audio>
-<audio id="clic3Sound" src="assets/audio/clic3.mp3" preload="auto"></audio>
-</body>
+          let isGrabbed = false;
+
+          const followMouse = (e) => {
+            if (isGrabbed) {
+              newImg.style.left = `${e.clientX - newImg.offsetWidth / 2}px`;
+              newImg.style.top = `${e.pageY - newImg.offsetHeight / 2}px`;
+            }
+          };
+
+          newImg.addEventListener("contextmenu", (e) => {
+            e.preventDefault();
+            const rect = newImg.getBoundingClientRect();
+            const offsetX = e.clientX - rect.left;
+            const offsetY = e.clientY - rect.top;
+            const percentX = (offsetX / newImg.offsetWidth) * 100;
+            const percentY = (offsetY / newImg.offsetHeight) * 100;
+            newImg.style.transformOrigin = `${percentX}% ${percentY}%`;
+            const isZoomed = newImg.dataset.zoomed === "true";
+            newImg.style.transform = isZoomed ? "scale(1)" : "scale(1.5)";
+            newImg.dataset.zoomed = (!isZoomed).toString();
+          });
+
+          newImg.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const clic3 = document.getElementById("clic3Sound");
+            if (clic3) {
+              clic3.volume = 0.1; // Réduit le volume (entre 0 et 1)
+              clic3.currentTime = 0;
+              clic3.play().catch((e) => console.warn("clic3 non lancé", e));
+            }
+            isGrabbed = !isGrabbed;
+            newImg.classList.toggle("grabbed", isGrabbed);
+            if (isGrabbed) {
+              document.addEventListener("mousemove", followMouse);
+            } else {
+              document.removeEventListener("mousemove", followMouse);
+            }
+          });
+        });
+      });
+    </script>
+    <!-- Juste avant la fermeture de body -->
+    <audio
+      id="oculusSound"
+      src="assets/audio/ambiancemnemozine1.mp3"
+      preload="auto"
+    ></audio>
+    <audio id="clicSound" src="assets/audio/clic1.mp3" preload="auto"></audio>
+    <audio id="clic2Sound" src="assets/audio/clic2.mp3" preload="auto"></audio>
+    <audio id="clic3Sound" src="assets/audio/clic3.mp3" preload="auto"></audio>
+  </body>
 </html>
