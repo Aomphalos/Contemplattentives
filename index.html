@@ -289,6 +289,7 @@ const textSnippets = [
     oculusBtn.addEventListener("click", () => {
       const clic1 = document.getElementById("clicSound");
       if (clic1) {
+        clic1.volume = 0.4; // Réduit le volume (entre 0 et 1)
         clic1.currentTime = 0;
         clic1.play().catch((e) => console.warn("clic1 non lancé", e));
       }
@@ -308,6 +309,7 @@ const textSnippets = [
 imageReveal.addEventListener("click", () => {
   const clic2 = document.getElementById("clic2Sound");
   if (clic2) {
+    clic1.volume = 0.4; // Réduit le volume (entre 0 et 1)
     clic2.currentTime = 0;
     clic2.play().catch((e) => console.warn("clic2 non lancé", e));
   }
@@ -398,6 +400,7 @@ const isTextInstead = textSnippets.length > 0 && Math.random() < 0.2;
     e.stopPropagation();
     const clic3 = document.getElementById("clic3Sound");
     if (clic3) {
+      clic1.volume = 0.4; // Réduit le volume (entre 0 et 1)
       clic3.currentTime = 0;
       clic3.play().catch((e) => console.warn("clic3 non lancé", e));
     }
