@@ -307,12 +307,12 @@ const textSnippets = [
 
     // 🌌 Clic sur image centrale contemplatio
 imageReveal.addEventListener("click", () => {
-  const clic2 = document.getElementById("clic2Sound");
-  if (clic2) {
-    clic1.volume = 0.4; // Réduit le volume (entre 0 et 1)
-    clic2.currentTime = 0;
-    clic2.play().catch((e) => console.warn("clic2 non lancé", e));
-  }
+const clic2 = document.getElementById("clic2Sound");
+if (clic2) {
+  clic2.volume = 0.4; // ✅ bon volume réglé
+  clic2.currentTime = 0;
+  clic2.play().catch((e) => console.warn("clic2 non lancé", e));
+}
 
 // 🔀 Parfois, au lieu d'une image, on montre du texte (20% de chance) — mais une seule fois
 const isTextInstead = textSnippets.length > 0 && Math.random() < 0.2;
@@ -400,7 +400,7 @@ const isTextInstead = textSnippets.length > 0 && Math.random() < 0.2;
     e.stopPropagation();
     const clic3 = document.getElementById("clic3Sound");
     if (clic3) {
-      clic1.volume = 0.4; // Réduit le volume (entre 0 et 1)
+      clic3.volume = 0.4; // Réduit le volume (entre 0 et 1)
       clic3.currentTime = 0;
       clic3.play().catch((e) => console.warn("clic3 non lancé", e));
     }
