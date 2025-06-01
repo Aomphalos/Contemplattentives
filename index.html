@@ -249,6 +249,7 @@
     ];
 
     let currentImageIndex = 0;
+let textAlreadyShown = false;
 
     const oculusBtn = document.getElementById("oculusBtn");
     const luminousFade = document.getElementById("luminousFade");
@@ -298,8 +299,8 @@ imageReveal.addEventListener("click", () => {
     clic2.play().catch((e) => console.warn("clic2 non lancé", e));
   }
 
-  // 🔀 Parfois, au lieu d'une image, on montre du texte (20% de chance)
-  const isTextInstead = Math.random() < 0.2;
+// 🔀 Parfois, au lieu d'une image, on montre du texte (20% de chance) — mais une seule fois
+const isTextInstead = !textAlreadyShown && Math.random() < 0.2;
 
   const container = document.querySelector(".container");
 
@@ -313,6 +314,9 @@ imageReveal.addEventListener("click", () => {
     textBox.style.left = `${x}px`;
     textBox.style.top = `${y}px`;
     container.appendChild(textBox);
+
+    textAlreadyShown = true;
+
 
     let isGrabbed = false;
     const followMouse = (e) => {
