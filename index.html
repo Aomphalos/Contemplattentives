@@ -197,149 +197,52 @@
       <div class="luminous-fade" id="luminousFade"></div>
     </div>
 
-    <script>
-      const imageList = [
-        "https://acces.ens-lyon.fr/acces/thematiques/limites/ecoles/parcours/chartreuse/img/profil_5.jpg",
-        "https://acces.ens-lyon.fr/acces/thematiques/limites/ecoles/parcours/chartreuse/img/figures_coupe_copie.jpg",
-        "https://infoterre.brgm.fr/sites/default/files/upload/a_cgeo050_0749_1_jpg_0.jpg",
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Artemistempleplan.jpg/960px-Artemistempleplan.jpg",
-        "https://www.meisterdrucke.fr/kunstwerke/1260px/Unknown_Artist_-_Cross_section_of_the_earth_crust_allowing_Athanasius_Kircher_to_demonstrate_the_-_%28MeisterDrucke-949340%29.jpg",
-        "https://i.la-croix.com/836x/smart/croire/2015/11/27/1700874510/LAnnonciation-Fra-Angelico-Musee-Prado-Madrid_0.jpg",
-        "https://www.hqe.guidenr.fr/images/couches-thermiques-atmosphere.jpg",
-        "https://upload.wikimedia.org/wikipedia/commons/6/62/Bilma-Saline-85.jpg",
-        "https://pouvoirsafrique.com/pouvoirsafrique/uploads/images/2025/01/08/12169.png",
-        "https://polinacouture.com/wp-content/uploads/2022/04/intro-art-aborigene.jpg",
-        "https://images.squarespace-cdn.com/content/v1/577b0a48e4fcb599ceaf2072/1570968992861-QO3JECLJZ0B519EX61VK/Armando+Veve+encore+plus+petit.jpg?format=2500w",
-        "https://culturellementvotre.fr/wp-content/uploads/2020/10/palais-mental-1-810x552.jpg",
-        "https://revue-acropolis.com/wp-content/uploads/sites/20/2023/08/321.Memoire-Renaissance.theatre_de_memoire_Giulio_Camillo_Delminio-780x470.jpg",
-        "https://d-fiction.fr/wp-content/uploads/2021/12/Boutonnet-Mof-Image2.jpg",
-        "https://fydn.imgix.net/m/x1000/135152dc-73a2-422a-a37a-6ed3e3af25ed.jpg?q=75&auto=format,compress&w=980&dpr=1",
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Ein_Augur.jpg/1024px-Ein_Augur.jpg",
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Georges_de_La_Tour_007.jpg/800px-Georges_de_La_Tour_007.jpg",
-        "https://www.guggenheim.org/wp-content/uploads/1974/01/92.4177_cu_web-1.jpg",
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Simeon_Stylites_%28Syria%29.jpg/800px-Simeon_Stylites_%28Syria%29.jpg",
-        "https://upload.wikimedia.org/wikipedia/commons/4/43/Column_of_St_Simeon_The_Stylite.jpg",
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Anatome_Animalium_frontispiece.jpg/800px-Anatome_Animalium_frontispiece.jpg",
-        "https://www.rhuthmos.eu/IMG/jpg/-1085.jpg",
-        "https://galeriejoseph.com/wp-content/uploads/2023/11/galeriejoseph.com-claudio-parmiggiani-ce-vide-fait-dinfini-acumen-magazine-artiste-claudio-parmiggiani-livres-1536x1152.jpg",
-        "https://www.centrepompidou.fr/fileadmin/_processed_/2/5/csm_20201020-matisse-expo-collioure-porte_442f265813.jpg",
-        "https://curieuseshistoires-belgique.be/wp-content/uploads/2019/03/Andre%CC%81-Ve%CC%81sale.jpg",
-      ];
-
-      const placedPositions = [];
-      let currentImageIndex = 0;
-      let grabbedImage = null;
-
-      const oculusBtn = document.getElementById("oculusBtn");
-      const luminousFade = document.getElementById("luminousFade");
-      const imageReveal = document.getElementById("imageReveal");
-oculusBtn.addEventListener("click", () => {
-  // Lancer le son "clic1"
-  const clicSound = document.getElementById("clicSound");
-  if (clicSound) {
-    clicSound.currentTime = 0;
-    clicSound.play().catch((e) => {
-      console.warn("Son clic non lancé : interaction utilisateur requise", e);
-    });
-  }
-
-  oculusBtn.classList.add("fade-out");
-  luminousFade.classList.add("visible");
-
-  setTimeout(() => {
-    oculusBtn.style.display = "none";
-    imageReveal.style.display = "block";
-
-    // Après un second temps, on fait disparaître le halo
-    setTimeout(() => {
-      luminousFade.classList.remove("visible");
-    }, 1200);
-  }, 1600);
-});
-
-document.getElementById("imageReveal").addEventListener("click", () => {
-  const clic2Sound = document.getElementById("clic2Sound");
-  if (clic2Sound) {
-    clic2Sound.currentTime = 0;
-    clic2Sound.play().catch((e) => {
-      console.warn("Son clic2 non lancé", e);
-    });
-  }
-
-  if (currentImageIndex >= imageList.length) return;
-
-  const container = document.querySelector(".container");
-  const newImg = document.createElement("img");
-  newImg.src = imageList[currentImageIndex];
-  newImg.className = "floating-image";
-  newImg.dataset.zoomed = "false";
-
-  let x = Math.random() * (window.innerWidth - 200);
-  let y = 200 + Math.random() * window.innerHeight;
-  newImg.style.left = `${x}px`;
-  newImg.style.top = `${y}px`;
-  container.appendChild(newImg);
-  currentImageIndex++;
-
-  let isGrabbed = false;
-  let alreadyClicked = false;
-
-  const followMouse = (e) => {
-    if (isGrabbed) {
-      newImg.style.left = `${e.clientX - newImg.offsetWidth / 2}px`;
-      newImg.style.top = `${e.pageY - newImg.offsetHeight / 2}px`;
-    }
-  };
-
-  newImg.addEventListener("contextmenu", (e) => {
-    e.preventDefault();
-    const rect = newImg.getBoundingClientRect();
-    const offsetX = e.clientX - rect.left;
-    const offsetY = e.clientY - rect.top;
-    const percentX = (offsetX / newImg.offsetWidth) * 100;
-    const percentY = (offsetY / newImg.offsetHeight) * 100;
-    newImg.style.transformOrigin = `${percentX}% ${percentY}%`;
-    const isZoomed = newImg.dataset.zoomed === "true";
-    newImg.style.transform = isZoomed ? "scale(1)" : "scale(1.5)";
-    newImg.dataset.zoomed = (!isZoomed).toString();
-  });
-
-newImg.addEventListener("click", (e) => {
-  e.preventDefault();
-  e.stopPropagation();
-
-  isGrabbed = !isGrabbed;
-  newImg.classList.toggle("grabbed", isGrabbed);
-
-  // Jouer clic3 à chaque clic
-  const clic3Sound = document.getElementById("clic3Sound");
-  if (clic3Sound) {
-    clic3Sound.currentTime = 0;
-    clic3Sound.play().catch((e) => {
-      console.warn("Son clic3 non lancé", e);
-    });
-  }
-
-  if (isGrabbed) {
-    document.addEventListener("mousemove", followMouse);
-  } else {
-    document.removeEventListener("mousemove", followMouse);
-  }
-});
-  <script>
+   <script>
   document.addEventListener("DOMContentLoaded", () => {
+    const imageList = [
+      "https://acces.ens-lyon.fr/acces/thematiques/limites/ecoles/parcours/chartreuse/img/profil_5.jpg",
+      "https://acces.ens-lyon.fr/acces/thematiques/limites/ecoles/parcours/chartreuse/img/figures_coupe_copie.jpg",
+      "https://infoterre.brgm.fr/sites/default/files/upload/a_cgeo050_0749_1_jpg_0.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Artemistempleplan.jpg/960px-Artemistempleplan.jpg",
+      "https://www.meisterdrucke.fr/kunstwerke/1260px/Unknown_Artist_-_Cross_section_of_the_earth_crust_allowing_Athanasius_Kircher_to_demonstrate_the_-_%28MeisterDrucke-949340%29.jpg",
+      "https://i.la-croix.com/836x/smart/croire/2015/11/27/1700874510/LAnnonciation-Fra-Angelico-Musee-Prado-Madrid_0.jpg",
+      "https://www.hqe.guidenr.fr/images/couches-thermiques-atmosphere.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/6/62/Bilma-Saline-85.jpg",
+      "https://pouvoirsafrique.com/pouvoirsafrique/uploads/images/2025/01/08/12169.png",
+      "https://polinacouture.com/wp-content/uploads/2022/04/intro-art-aborigene.jpg",
+      "https://images.squarespace-cdn.com/content/v1/577b0a48e4fcb599ceaf2072/1570968992861-QO3JECLJZ0B519EX61VK/Armando+Veve+encore+plus+petit.jpg?format=2500w",
+      "https://culturellementvotre.fr/wp-content/uploads/2020/10/palais-mental-1-810x552.jpg",
+      "https://revue-acropolis.com/wp-content/uploads/sites/20/2023/08/321.Memoire-Renaissance.theatre_de_memoire_Giulio_Camillo_Delminio-780x470.jpg",
+      "https://d-fiction.fr/wp-content/uploads/2021/12/Boutonnet-Mof-Image2.jpg",
+      "https://fydn.imgix.net/m/x1000/135152dc-73a2-422a-a37a-6ed3e3af25ed.jpg?q=75&auto=format,compress&w=980&dpr=1",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Ein_Augur.jpg/1024px-Ein_Augur.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Georges_de_La_Tour_007.jpg/800px-Georges_de_La_Tour_007.jpg",
+      "https://www.guggenheim.org/wp-content/uploads/1974/01/92.4177_cu_web-1.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Simeon_Stylites_%28Syria%29.jpg/800px-Simeon_Stylites_%28Syria%29.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/4/43/Column_of_St_Simeon_The_Stylite.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Anatome_Animalium_frontispiece.jpg/800px-Anatome_Animalium_frontispiece.jpg",
+      "https://www.rhuthmos.eu/IMG/jpg/-1085.jpg",
+      "https://galeriejoseph.com/wp-content/uploads/2023/11/galeriejoseph.com-claudio-parmiggiani-ce-vide-fait-dinfini-acumen-magazine-artiste-claudio-parmiggiani-livres-1536x1152.jpg",
+      "https://www.centrepompidou.fr/fileadmin/_processed_/2/5/csm_20201020-matisse-expo-collioure-porte_442f265813.jpg",
+      "https://curieuseshistoires-belgique.be/wp-content/uploads/2019/03/Andre%CC%81-Ve%CC%81sale.jpg",
+    ];
+
+    let currentImageIndex = 0;
+
+    const oculusBtn = document.getElementById("oculusBtn");
+    const luminousFade = document.getElementById("luminousFade");
+    const imageReveal = document.getElementById("imageReveal");
     const soundBtn = document.getElementById("playSoundBtn");
     const sound = document.getElementById("oculusSound");
 
+    // 🎵 bouton son
     if (sound && soundBtn) {
       sound.loop = true;
       soundBtn.addEventListener("click", () => {
         if (sound.paused) {
           sound.play().then(() => {
             soundBtn.classList.add("playing");
-          }).catch((e) => {
-            console.error("Erreur de lecture :", e);
-          });
+          }).catch((e) => console.error("Erreur lecture :", e));
         } else {
           sound.pause();
           soundBtn.classList.remove("playing");
@@ -347,31 +250,16 @@ newImg.addEventListener("click", (e) => {
       });
     }
 
-    const imageList = [/* ... tes URLs ... */];
-    let currentImageIndex = 0;
-
-    const oculusBtn = document.getElementById("oculusBtn");
-    const luminousFade = document.getElementById("luminousFade");
-    const imageReveal = document.getElementById("imageReveal");
-
-    if (!oculusBtn || !imageReveal) {
-      console.error("❌ Éléments introuvables !");
-      return;
-    }
-
-    // 🎯 Clic sur le GIF Oculus
+    // 🌀 Clic sur oculus
     oculusBtn.addEventListener("click", () => {
-      const clicSound = document.getElementById("clicSound");
-      if (clicSound) {
-        clicSound.currentTime = 0;
-        clicSound.play().catch((e) => {
-          console.warn("Son clic non lancé :", e);
-        });
+      const clic1 = document.getElementById("clicSound");
+      if (clic1) {
+        clic1.currentTime = 0;
+        clic1.play().catch((e) => console.warn("clic1 non lancé", e));
       }
 
       oculusBtn.classList.add("fade-out");
       luminousFade.classList.add("visible");
-
       setTimeout(() => {
         oculusBtn.style.display = "none";
         imageReveal.style.display = "block";
@@ -381,14 +269,12 @@ newImg.addEventListener("click", (e) => {
       }, 1600);
     });
 
-    // 🎯 Clic sur l'image "Contemplatio"
+    // 🌌 Clic sur image centrale contemplatio
     imageReveal.addEventListener("click", () => {
-      const clic2Sound = document.getElementById("clic2Sound");
-      if (clic2Sound) {
-        clic2Sound.currentTime = 0;
-        clic2Sound.play().catch((e) => {
-          console.warn("Son clic2 non lancé", e);
-        });
+      const clic2 = document.getElementById("clic2Sound");
+      if (clic2) {
+        clic2.currentTime = 0;
+        clic2.play().catch((e) => console.warn("clic2 non lancé", e));
       }
 
       if (currentImageIndex >= imageList.length) return;
@@ -415,6 +301,7 @@ newImg.addEventListener("click", (e) => {
         }
       };
 
+      // 🖱️ Zoom au clic droit
       newImg.addEventListener("contextmenu", (e) => {
         e.preventDefault();
         const rect = newImg.getBoundingClientRect();
@@ -428,16 +315,15 @@ newImg.addEventListener("click", (e) => {
         newImg.dataset.zoomed = (!isZoomed).toString();
       });
 
+      // ✋ Clic gauche pour attraper / relâcher
       newImg.addEventListener("click", (e) => {
         e.preventDefault();
         e.stopPropagation();
 
-        const clic3Sound = document.getElementById("clic3Sound");
-        if (clic3Sound) {
-          clic3Sound.currentTime = 0;
-          clic3Sound.play().catch((e) => {
-            console.warn("Son clic3 non lancé", e);
-          });
+        const clic3 = document.getElementById("clic3Sound");
+        if (clic3) {
+          clic3.currentTime = 0;
+          clic3.play().catch((e) => console.warn("clic3 non lancé", e));
         }
 
         isGrabbed = !isGrabbed;
@@ -451,4 +337,16 @@ newImg.addEventListener("click", (e) => {
     });
   });
 </script>
+<!-- Juste avant la fermeture de body -->
+<audio id="oculusSound" src="assets/audio/ambiance-cenacliere-etage.mp3" preload="auto"></audio>
+<audio id="clicSound" src="assets/audio/clic1.mp3" preload="auto"></audio>
+<audio id="clic2Sound" src="assets/audio/clic2.mp3" preload="auto"></audio>
+<audio id="clic3Sound" src="assets/audio/clic3.mp3" preload="auto"></audio>
 
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // (code principal ici)
+  });
+</script>
+</body>
+</html>
