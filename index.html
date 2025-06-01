@@ -233,21 +233,30 @@
       const oculusBtn = document.getElementById("oculusBtn");
       const luminousFade = document.getElementById("luminousFade");
       const imageReveal = document.getElementById("imageReveal");
+oculusBtn.addEventListener("click", () => {
+  // Lancer le son "clic1"
+  const clicSound = document.getElementById("clicSound");
+  if (clicSound) {
+    clicSound.currentTime = 0;
+    clicSound.play().catch((e) => {
+      console.warn("Son clic non lancé : interaction utilisateur requise", e);
+    });
+  }
 
-      oculusBtn.addEventListener("click", () => {
-        oculusBtn.classList.add("fade-out");
-        luminousFade.classList.add("visible");
+  oculusBtn.classList.add("fade-out");
+  luminousFade.classList.add("visible");
 
-        setTimeout(() => {
-          oculusBtn.style.display = "none";
-          imageReveal.style.display = "block";
+  setTimeout(() => {
+    oculusBtn.style.display = "none";
+    imageReveal.style.display = "block";
 
-          // Après un second temps, on fait disparaître le halo
-          setTimeout(() => {
-            luminousFade.classList.remove("visible");
-          }, 1200); // ou ajuste à ton goût
-        }, 1600); // attend la fin de l'animation
-      });
+    // Après un second temps, on fait disparaître le halo
+    setTimeout(() => {
+      luminousFade.classList.remove("visible");
+    }, 1200);
+  }, 1600);
+});
+
 
       document.getElementById("imageReveal").addEventListener("click", () => {
         if (currentImageIndex >= imageList.length) return;
@@ -310,6 +319,7 @@
       });
     </script>
 <audio id="oculusSound" src="assets/audio/ambiance-cenacliere-etage.mp3" preload="auto"></audio>
+<audio id="clicSound" src="assets/audio/clic1.mp3" preload="auto"></audio>
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
