@@ -62,26 +62,56 @@
         background: #ff5555;
       }
 
-      .organizer-button {
+      .hex-link {
         position: fixed;
         bottom: 20px;
-        right: 100px; /* à gauche du bouton son */
+        left: 20px;
         width: 30px;
         height: 30px;
         background: white;
         clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
         cursor: pointer;
         z-index: 20;
-        animation: slowSpin 8s linear infinite, pulse 2.5s infinite;
+        animation: pulse 1.5s infinite;
+        display: block;
       }
 
-      @keyframes slowSpin {
-        0% {
-          transform: rotate(0deg);
-        }
-        100% {
-          transform: rotate(360deg);
-        }
+      .hex-link {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        width: 30px;
+        height: 30px;
+        background: white;
+        clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
+        cursor: pointer;
+        z-index: 20;
+        animation: pulse 1.5s infinite;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        position: fixed;
+      }
+
+      .hex-link .hex-label {
+        position: absolute;
+        bottom: 40px; /* au-dessus de l'hexagone */
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-size: 10px;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+        white-space: nowrap;
+      }
+
+      .hex-link:hover .hex-label {
+        opacity: 1;
       }
 
       @keyframes pulse {
@@ -243,12 +273,14 @@
       <div class="focus-overlay" id="focusOverlay"></div>
       <div class="reset-button" onclick="location.reload()"></div>
       <div class="sound-button" id="playSoundBtn" title="Lancer le son"></div>
-      <div
-        class="organizer-button"
-        id="organizerBtn"
-        title="Organiser les éléments"
-      ></div>
       <div class="luminous-fade" id="luminousFade"></div>
+      <a
+        href="https://aomphalos.github.io/bibliographiecenacliere/"
+        target="_blank"
+        class="hex-link"
+      >
+        <span class="hex-label">Bibliographie</span>
+      </a>
     </div>
 
     <script>
